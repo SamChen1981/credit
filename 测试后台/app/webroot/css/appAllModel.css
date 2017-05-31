@@ -1,0 +1,87 @@
+/*红色必填选项*/
+.text_red{
+    display:inline-block;
+    margin-left:20px;
+    width:10px;
+    text-align:center;
+    color:red;
+}
+.w100,.text-box .select.w100{
+    width:100px;
+}
+.w300{
+    width:300px;
+}
+.w80{
+    width:80px;
+}
+.text-box .select.w148,.w148{
+    width:148px;
+}
+.cominput{
+    height:26px;
+}
+
+.small_description{
+    color:#999999;
+    padding:8px 0px;
+}
+/*积分购买记录*/
+.buy_point_record{
+    width:80%;
+    height:270px;
+}
+.pointImg_big{
+background-position:-610px -10px;
+}
+/*积分商城*/
+.ico_look{
+    background-position:-420px -657px;/*查看图标*/
+}
+.ico_publish{
+    background-position:-728px -44px;/*发布图标*/
+}
+.ico_bac{
+    background-position:-755px -44px;/*撤销图标*/
+}
+.pointMall_big{
+    background-position:-613px -72px;
+}
+.mall_upImg_box{
+    height:110px;
+    padding:15px;
+    border:1px solid #dddddd;
+    display:none;
+}
+.mall_upImg_box img{
+
+    vertical-align: top;
+}
+.mall_operate_img{
+    margin-top:5px;
+}
+.mall_operate_img span{
+    color:#25a3eb;
+    cursor: pointer;
+}
+.mall_operate_img .webuploader-pick{
+ background:none;
+padding:0px;
+    color:#25a3eb
+}
+.form_btn .webuploader-pick{
+    line-height: 30px;
+    padding: 0px 15px;
+    border-radius:0px;
+    background-color:#25a3eb;
+}
+.a_link{
+    color:#25a3eb;
+    text-decoration:underline;
+}
+.ico_duihuan{
+    background-position:-700px -44px;
+}
+.edit_img_tip{
+    max-width:100%;
+}

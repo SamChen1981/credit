@@ -1,0 +1,27 @@
+
+function num(e){
+	var id=$(e).attr('id');
+	var num=$(e).attr('num');
+	$.ajax({
+		type:"post",
+		url:<?php echo Yii::app()->createUrl('控制器/方法名'),
+		data:{"id":id,"num":num}
+		datatype:"json",
+	})
+}
+
+public function num(){
+	$data=$_POST['data'];//yii::app()->request->getParam('data');
+	$num=$data['num'];
+	$id=$data['id'];
+	$model=模型名::model()->findByPk($id);
+	foreach($data as $k=>$v){
+       $model->$k=$v;
+	}
+	$val=$data['val']*$num;
+	if($model::save()){
+	    echo json_encode(array('code'=>'100','message'=>'success','num'=>$val));exit;
+	}else{
+        echo json_encode(array('code'=>'401','message'=>'error'));exitl;
+	}
+}

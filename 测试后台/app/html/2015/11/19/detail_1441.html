@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="MobileOptimized" content="320"/>
+        <title>雅居乐十里花巷_文章</title>
+        <script src="/template/default/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <link href="/template/default/css/content_pc.css" rel="stylesheet" type="text/css" />
+        <link href="/template/default/css/img.css" rel="stylesheet" type="text/css" />
+        <!--内容部分-->
+        <article class="content_box">
+            <h1>雅居乐十里花巷</h1>
+            <time><span style="margin-right: 20px; font-size: 12px;">来源:</span>2015年12月01日 10:04</time>
+　　    <div class="text" style="word-break:break-all;word-wrap:break-word;text-align:left;font-size:19px;line-height:28px;margin-left:3%;margin-right:2%;width:95%;word-spacing:0px;letter-spacing: 1px;">
+　　      <p><span style="color:#333333;font-family:arial, 宋体;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:24px;orphans:auto;text-align:left;text-indent:0px;text-transform:none;widows:auto;word-spacing:0px;-webkit-text-stroke-width:0px;display:inline !important;float:none;background-color:#ffffff;"> &nbsp; &nbsp;雅居乐全新6期十里花巷，主力产品180-330㎡城市臻品别墅及100-170㎡宽景低密墅质洋，十里花巷项目总占地约478亩，地势呈高低起伏的浅丘陵状，东面和北面全是原生态的山林，非常生态和自然。 　　成都雅居乐花园位于成都城南，拥上千亩原生态森林、毗邻60亩天然湖泊；2公里风景主轴线与13000平米中央景观区，30亩内湖；2.1万平方米会所，400米商业长街；1：1车库；社区内设五星级酒店。 &nbsp; &nbsp;</span><br /></p>            </div>
+        </article>
+        <script>
+            var maxsize = 0;
+            function bigFontSize() {
+                if (maxsize <= 5) {
+                    $('*').css({
+                        'font-size': function(index, value) {
+                            var size = parseInt(value);
+                            size += 4;
+                            return size + 'px';
+                        },
+                        'line-height': function(index, value) {
+                            var size_2 = parseInt(value);
+                            size_2 += 3;
+                            return size_2 + 'px';
+                        }
+                    });
+                    maxsize++;
+
+                }
+                return maxsize;
+            }
+            function smallFontSize() {
+                if (maxsize <= 5) {
+                    $('*').css({
+                        'font-size': function(index, value) {
+                            var size = parseInt(value);
+
+                            size -= 4;
+                            return size + 'px';
+                        },
+                        'line-height': function(index, value) {
+                            var size_2 = parseInt(value);
+                            size_2 -= 3;
+                            return size_2 + 'px';
+                        }
+                    });
+                    maxsize--;
+                }
+                return maxsize;
+            }
+        </script>
+    </body>
+</html>

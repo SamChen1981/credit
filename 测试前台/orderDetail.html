@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+</head>
+<style>
+    .order-list li{
+        padding: 0 10px 0 70px; position: relative; height: auto; min-height: 30px;
+    }
+    .order-list-li-span{
+        position: absolute; top: 0; left: 10px;
+    }
+    .order-list-li-cont{
+        max-width: 100%; word-break: break-all;
+    }
+</style>
+<body>
+<header>
+    <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+    <h3>订单详情</h3>
+</header>
+<!-- /header -->
+<div>
+    <ul class="integral-change-record order-detail">
+
+
+    </ul>
+
+</div>
+<div class="order-change-bond">
+    <ul style="display:none" id="code">
+        <li class="clearfix">
+            <span>兑换码</span><span class="text-primary fr" id="goodsid"></span>
+        </li>
+        <li class="clearfix num">
+            <span >有效期</span><span id="indate" class="fr"></span>
+            <!-- <span class="text-primary" id="goodsid"></span> -->
+            <!-- <span class="fr" id="state"></span> -->
+        </li>
+    </ul>
+    <ul class="order-list">
+        <li class="clearfix order-list-li">
+            <span class="order-list-li-span">订单详情</span>
+            <span style="float:right" id="state" class="order-list-li-cont">待发货</span>
+            <div style="clear: both;"></div>
+        </li>
+        <li class="clearfix order-list-li">
+            <span class="order-list-li-span">订单号</span>
+            <span class="fr colorsix order-list-li-cont" id="ordersno"></span>
+            <div style="clear: both;"></div>
+        </li>
+        <li class="clearfix order-list-li">
+            <span class="order-list-li-span">兑换时间</span>
+            <span class="fr colorsix order-list-li-cont" id="createtime"></span>
+            <div style="clear: both;"></div>
+        </li>
+        <!--<li class="clearfix">-->
+        <!--<span>手机号</span>-->
+        <!--<span class="fr colorsix" id="telphone1"></span>-->
+        <!--</li>-->
+        <li class="clearfix order-list-li">
+            <span id="add" class="order-list-li-span">兑换地址</span>
+            <span class="fr colorsix order-list-li-cont" id="address"></span>
+            <div style="clear: both;"></div>
+        </li>
+        <li class="clearfix order-list-li">
+            <span class="order-list-li-span">联系人</span>
+            <span class="fr colorsix order-list-li-cont" id="name"></span>
+            <div style="clear: both;"></div>
+        </li>
+        <li class="clearfix order-list-li">
+            <span class="order-list-li-span">联系电话</span>
+            <span class="fr colorsix order-list-li-cont" id="telphone"></span>
+            <div style="clear: both;"></div>
+        </li>
+        <li class="clearfix getTime order-list-li" style="display:none">
+            <span class="order-list-li-span">领取时间</span><span class="fr colorsix order-list-li-cont" id="getTime"></span>
+            <div style="clear: both;"></div>
+        </li>
+    </ul>
+</div>
+<span id="showInfo"></span>
+<span id="confirm"></span>
+<script src="js/config.js"></script>
+<script src="js/jquery2.1.1.js"></script>
+<script src="js/swiper.jquery.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/common.js"></script>
+<script>
+    function getDatePhp(tm){
+        var tt=new Date(parseInt(tm*1000)).toLocaleString();
+        return tt;
+    }
+    function getDate(tm){
+        var tt=new Date(parseInt(tm)).toLocaleString();
+        return tt;
+    }
+    Date.prototype.format = function(format) {
+        var date = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S+": this.getMilliseconds()
+        };
+        if (/(y+)/i.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (var k in date) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                        ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+            }
+        }
+        return format;
+    }
+    $.ajax({
+        url: '/creditshop/getOrdersInfo/',
+        type: 'post',
+        async:false,
+        dataType: 'json',
+        data: {ordersNo:ordersNo,uid:uid,token:token,tenantid:tenent},
+        success:function(data){
+            var state = {'1':'待发货','2':'已发货','3':'已收货','4':'未领取','5':'已领取'};
+            console.log(data);
+            if(data.code == 0000){
+                goodsId=data.data.goodsID;
+                var goodsInfo =  $.parseJSON(data.data.goodsInfo);
+                var html = '<li class="clearfix"><a class="clearfix" href="javascript:void(0)" onclick="checkgoodsId()"><img src="'+goodsInfo.imgUrl+'" class="fl" alt=""><h4>'+goodsInfo.name+'</h4> <p><i class="icon iconfont text-primary"></i><span class="text-primary">'+goodsInfo.credits+'</span></p> <i class="icon iconfont right-guide"></i></a></li>';
+                $(".integral-change-record").html(html);
+                // $("#state").html(state[data.data.logisticsStatus]);
+                $("#state").html(state[data.data.ordersStatus]);
+                if(data.data.virtualGoodsCode!=""&&data.data.virtualGoodsCode!=null){
+                    var status=data.data.ordersStatus;
+                   $("#code").css("display","block");
+                   $("#goodsid").html(data.data.virtualGoodsCode);
+                   $("#state").html(state[status]);
+                }
+                $("#ordersno").html(data.data.ordersNo);
+                var time=new Date(data.data.createTime);
+                $("#createtime").html(time.format('yyyy-MM-dd hh:mm:ss'));
+                if(data.data.shippingMethod==1){
+                    console.log(data.data.logisticsNum!="");
+                    console.log(data.data);
+                    if(data.data.logisticsNum!=""&&data.data.logisticsNum!=null){
+                        var showInfo='<a class="button-change button btn-primary" href="courierInfo.html" style="position: relative;float:left;width:30%;left:19%;">查看物流信息 </a>';
+                        $("#showInfo").html(showInfo);
+                        $("#showInfo a").attr("href",'courierInfo.html?logisticsNum='+data.data.logisticsNum);
+                        var confirm='<a class="button-change button btn-primary" href="javascript:void(0);" style="position: relative;float:right;width:30%;right:19%;">确认收货 </a>';
+                        $("#confirm").html(confirm);
+                        $("#confirm a").click(function(){
+                            $.ajax({
+                                url: '/creditshop/confirmOrders/',
+                                type: 'post',
+                                dataType: 'json',
+                                data: {ordersNo: ordersNo, uid: uid, token: token, tenantid: tenent},
+                                success: function (data) {
+                                    $("#state").html(data.description);
+                                }
+                            })
+                        })
+                    }
+                }
+            }else{
+                alert("错误")
+            }
+            var address = $.parseJSON(data.data.address);
+            var goodInfo = $.parseJSON(data.data.goodsInfo);
+            if(goodsInfo.order_start_time=='0' && goodsInfo.order_end_time=='0'){
+                $("#indate").html("不限");
+            }else{
+                $("#indate").html(goodsInfo.order_strat+'-'+goodsInfo.order_end);
+            }
+            $("#telphone").html(goodsInfo.phone);
+            if(data.data.shippingMethod==1){
+                $("#indate").parent().html("");
+                $("#add").html("邮寄地址");
+                console.debug(address.province+address.city+address.county+address.street);
+                $("#address").html(address.province+address.city+address.county+address.street);
+                $("#name").html(address.name);
+                $("#telphone").html(address.phoneNum);
+            }else{
+                $("#address").html(goodsInfo.addr);
+                $("#name").html(goodsInfo.link);
+                if(data.data.logisticsStatus==5){
+                    $(".getTime").show();
+                    $("#getTime").html(getDate(data.data.modifyTime));
+                }
+
+            }
+        },
+    })
+    function checkgoodsId(){
+    $.ajax({
+            url: '/creditshop/checkgoodsId/?tenantid='+tenent,
+            type: 'post',
+            dataType: 'json',
+            data:{goodsId:goodsId,sign:1,appKey:1,timestamp:1},
+            success:function(data){
+                console.debug(data);
+                if(data.code=='0000'){
+                    $(".integral-change-record .clearfix a").attr('href',"goodsDetail.html?goodsId="+goodsId);
+                    location.href="goodsDetail.html?goodsId="+goodsId;
+                }else{
+                    alert('商品已下架');
+                }
+            },
+            error:function(data){
+
+            }
+    })
+    }
+    //        $("#showInfo").click(function(){
+    //
+    //        })
+</script>
+</body>
+</html>

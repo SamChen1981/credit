@@ -1,0 +1,111 @@
+.wave_big{background-position:-603px -38px;}
+.app_page{height:40px;padding-top:10px;}
+.app_page .laypage_main{margin-right:20px;float:right;}
+.laypageskin_xcontent .laypage_curr{border-left:1px solid #E7E7E7; }
+input[type="text"],input[type="password"]{
+    height: 28px;
+    border:1px solid #ebebeb ;
+    padding:0 5px ;
+    color:#888888 ;
+}
+
+/*现场活动*/
+.view{background-position: -671px -44px;}
+.wave_del{background-position: 0 -655px;height: 18px;}
+.wave_edit{background-position: 0 -636px}
+.wave_up{background-position: -728px -44px}
+.wave_undo{background-position:-755px -44px }
+.wave_integral{background-position: -700px -44px;}
+/*新增现场、TV、app活动*/
+.wave_new_active{padding:5px 20px;}
+.new_need{width: 10px;color: #ed0606;display: inline-block;  vertical-align: middle;}
+.wave_new_active p{line-height: 40px;}
+.wave_new_active input{margin-left: 10px;}
+.new_need_text{margin-left: 10px;width: 250px;}
+.Validform_checktip{margin-left:0;}
+.info{
+    border:1px solid #ccc;
+    padding:2px 20px 2px 5px;
+    color:#666;
+    position:absolute;
+    display:none;
+    line-height:20px;
+    background-color:#fff;
+}
+.dec {
+    bottom: -8px;
+    display: block;
+    height: 8px;
+    overflow: hidden;
+    position: absolute;
+    left: 10px;
+    width: 17px;
+}
+.wave_new_active_prompt{color:#999}
+.registerform textarea {
+    border: 1px solid #ddd;
+    width: 390px;
+    height: 70px;
+    padding: 4px 2px;
+    margin-left: 10px;
+}
+.wave_add_btn{display:inline-block;cursor:pointer;padding: 0 10px;border: 1px solid #ddd;line-height: 24px}
+.wave_add_btn i{display: inline-block;width: 23px;height: 24px;vertical-align:top}
+.wave_active_add{background-position:-53px -263px;}
+.wave_active_add_curr{background-position:-90px -263px;}
+.wave_add_btn:hover{color:#25a3eb;border-color:#25a3eb }
+.wave_number_inp{width:40px;text-align: center;height: 24px;}
+.wave_text_inp{width:120px;text-align: center;}
+.wave_new_active_lab{margin-left: 10px;}
+.slash{display: inline-block;width: 20px;text-align: center;margin-left: 5px;}
+.del_news_col{display: inline-block;padding: 0 10px;color:#25a3eb;cursor: pointer; }
+.integral_new_coloumn{width: 100%}
+.click_upload{display:inline-block;line-height:30px;padding: 0 10px;background-color: #25a3eb;color: #fff;;cursor: pointer;}
+.click_upload:hover{background-color:#337ab7 }
+.site_list{float: left;margin: 0 10px;border:1px solid #E7E7E7;width: 120px;}
+.site_list h1{height: 40px;line-height: 40px;font-size: 16px;background-color: #f4f4f4;text-align: center;}
+.site_cen{float: left;border:1px solid #E7E7E7;width: 410px;}
+.site_cen h1{height: 40px;line-height: 40px;font-size: 16px;background-color: #f4f4f4;text-align: center;}
+.site_cen h2{border-bottom: 1px solid #E7E7E7;}
+.site_cen h2 span{display: inline-block;padding-left:20px;width:163px;line-height: 36px;text-align: left;}
+/*活动详情*/
+.avtive_deta_par{height: 45px;line-height: 45px;margin-left: 20px;color: #333}
+.avtive_deta_integral{margin-left: 20px;height: 30px;}
+.avtive_deta_integral li{float: left;margin-right:10px;width: 125px;text-align: left;height: 30px;overflow: hidden;}
+.avtive_ntroductioni_par{margin-left: 20px;margin-top: 10px}
+ em{line-height:30px}
+.avtive_ntroductioni_par span{
+    display: inline-block;
+    line-height: 30px;
+    width: 323px;
+    vertical-align: top;
+}
+.avtive_prize_images{margin-left: 20px;height: 100px;}
+.avtive_prize_images img{
+    display: inline-block;
+    height: 90px;
+    width: 120px;
+    vertical-align: top;
+}
+.avtive_rules{display: block;}
+/*奖品兑换>搜索结果*/
+.prize_Search_types{position: relative;padding: 10px 20px 0}
+.prize_Search_types h1{line-height: 40px;}
+.pr_sea_select{position: relative;z-index: 99;width: 230px}
+.pr_sea_inp{width: 220px;position: relative;z-index: 66;margin-top: 10px}
+.search_prompt{padding: 0 20px;border-bottom: 1px solid #e7e7e7}
+.search_prompt p{line-height: 30px;color: #999999}
+.search_results_par{margin-left: 20px;color: #333333;line-height: 30px;margin-top: 20px}
+.Search_again{color:#25a3eb;text-decoration:underline;padding: 0 10px; }
+.win_field_title{display: block;float: left;padding: 0 10px;line-height: 30px;}
+/*活动统计，摇中奖品*/
+.right_middle_Activities{border-bottom: 1px solid #E7E7E7;}
+.right_middle_Activities h1{line-height: 40px;color: #333;}
+.right_middle_Activities p{line-height: 30px;}
+.right_middle_Activities p span{margin-right: 60px;color: #333}
+.right_middle_detail{margin-bottom: 10px;}
+.right_middle_detail h1{line-height: 40px;color: #333;}
+.details_winning_table{border-top:1px solid #e7e7e7;background-color: #f7f7f7 }
+.trfous{cursor:pointer}
+.trfousv{background-color:#ddd;}
+.table_list  .trfousv:hover{background-color:#ddd;}

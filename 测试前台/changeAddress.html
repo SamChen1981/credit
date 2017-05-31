@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body style="background:#fff">
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>修改收货地址</h3>
+        </header>
+        <!-- /header -->
+        <div class="award-get">
+            <div class="num01 change-address">
+                <p>默认收货地址：</p>
+                <div  id="default">
+                    
+                </div>
+               
+            </div>
+            <div class="change-address">
+                <p>其他收货地址：</p>
+                <div  id="notdefault">
+                
+                </div>
+            </div>          
+        </div>
+        <span><a class="button-change button btn-primary" href="addAddress.html" style="position: relative;float:left;width:30%;left:19%;">新增收货地址 </a></span>
+        <span><a class="button-up button btn-primary" href="changeSuccessPost.html" style="width:30%;float:right;right:19%;position: relative;">点击继续兑换 </a></span>
+        <script src="js/config.js"></script>
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/common.js"></script>
+        <script>
+        $(function(){
+            $(".award-get .change-address ul").on("click",function(){
+                 $(".change-address ul .icon").html("");
+                $(this).find(".icon").html("");
+            });
+            $.ajax({
+                url: '/creditshop/selectAddress/',
+                type: 'post',
+                dataType: 'json',
+                data: {id: '-1',uid:uid,token:token,tenantid:tenent},
+                success:function(data){
+                    var  notdefault = '';
+                    var  _default = '';
+                    $.each(data.data,function(index,comment){ 
+                        if(comment.isDefault==1){
+                             _default += '<ul class="colorsix"><i class="icon iconfont text-primary"></i><li>收货人：'+comment.name+'<span style="float:right;"><a href="editAddress.html?id='+comment.id+'&goodsId='+goodsId+'">修改&nbsp&nbsp&nbsp&nbsp&nbsp</a> <a href="javascript:void(0)" id='+comment.id+' onclick="del('+comment.id+')">删除</a></span></li><li>联系电话：'+comment.phoneNum+'</li><li>收货地址：'+comment.area+comment.street+'</li><li>邮编：'+comment.zipCode+'</li></ul>';
+//                            setTimeout(function () {
+//                                location.href='changeSuccessPost.html?goodsId='+goodsId;
+//                            },1000);
+                        }else{
+                             console.debug(data.data);
+                             notdefault += '<ul class="colorsix"><i class="icon iconfont text-primary"></i><li>收货人：'+comment.name+'<span style="float:right;" ><a href="javascript:void(0)" onclick="detail('+comment.id+')">默认地址&nbsp&nbsp&nbsp&nbsp&nbsp</a><a href="editAddress.html?id='+comment.id+'&goodsId='+goodsId+'">修改&nbsp&nbsp&nbsp&nbsp&nbsp</a> <a href="javascript:void(0)" id='+comment.id+' onclick="del('+comment.id+')">删除</a></span></li><li>联系电话：'+comment.phoneNum+'</li><li>收货地址：'+comment.area+comment.street+'</li><li>邮编：'+comment.zipCode+'</li></ul>';
+                        }
+                    });
+                    $("#default").html(_default);
+                    $("#notdefault").html(notdefault);
+                }
+            })
+        })
+
+        function detail(id){
+            $.ajax({
+                url: '/creditshop/selectReceivAddress/',
+                type: 'post',
+                dataType: 'json',
+                async : false,
+                data:{id: id,uid:uid,token:token,tenantid:tenent},
+                success:function(data) {
+                    console.debug(data);
+                    if(data.code=="0000"){
+                    location.reload();
+                    }
+                },
+            })
+        }
+        function del(id){
+            $.ajax({
+            url: '/creditshop/delAddress/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {id: id,uid:uid,token:token,tenantid:tenent},
+            success:function(data){
+                console.debug(data);
+                if(data.code=="0000") {
+                    alert('删除成功');
+                    $.ajax({
+                        url: '/creditshop/selectAddress/',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {id: '-1',uid:uid,token:token,tenantid:tenent},
+                        success:function(data){
+                            var  notdefault = '';
+                            var  _default = '';
+                            $.each(data.data,function(index,comment){
+                                if(comment.isDefault==1){
+                                    _default += '<span href="changeSuccessPost.html?id='+comment.id+'&goodsId='+goodsId+'"><ul class="colorsix"><i class="icon iconfont text-primary"></i><li>收货人：'+comment.name+'<span style="float:right;" ><a href="changeSuccessPost.html?id='+comment.id+'">修改&nbsp&nbsp&nbsp&nbsp&nbsp</a> <a href="javascript:void(0)" id='+comment.id+' onclick="del('+comment.id+')">删除</a></span></li><li>联系电话：'+comment.phoneNum+'</li><li>收货地址：'+comment.area+comment.street+'</li><li>邮编：'+comment.zipCode+'</li></ul></a>';
+                                }else{
+                                    console.debug(data.data);
+                                    notdefault += '<span href="changeSuccessPost.html?id='+comment.id+'&goodsId='+goodsId+'"><ul class="colorsix"><i class="icon iconfont text-primary"></i><li>收货人：'+comment.name+'<span style="float:right;" ><a href="javascript:void(0)" onclick="detail('+comment.id+')">默认地址&nbsp&nbsp&nbsp&nbsp&nbsp</a><a href="changeSuccessPost.html?id='+comment.id+'">  修改&nbsp&nbsp&nbsp&nbsp&nbsp</a> <a href="javascript:void(0)" id='+comment.id+' onclick="del('+comment.id+')">删除</a></span></li><li>联系电话：'+comment.phoneNum+'</li><li>收货地址：'+comment.area+comment.street+'</li><li>邮编：'+comment.zipCode+'</li></ul></a>';
+                                }
+                            });
+                            $("#default").html(_default);
+                            $("#notdefault").html(notdefault);
+                        }
+                    })
+
+                }else{
+                    alert(data.description);
+                }
+            }
+         })
+        }
+          $(".button-change").attr("href","addAddress.html?goodsId="+goodsId+"&uid="+uid+"&token="+token);
+          $(".button-up").attr("href","changeSuccessPost.html?goodsId="+goodsId+"&uid="+uid+"&token="+token);
+        </script>
+    </body>
+</html>

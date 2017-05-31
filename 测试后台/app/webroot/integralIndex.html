@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body>
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>积分商城</h3>
+        </header>
+        <!-- /header -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+            
+
+            
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        <section>
+            <div class="integral-sigle mb10">
+            </div>
+            <div class="mb10 integral-operate clearfix">
+                <a href="http://demo.member.sobeyyun.com/Template4/index.html">
+                    <i class="icon iconfont text-primary"></i>
+                    <span>赚积分</span>
+                </a>
+                <a href="javascript:" id="changeRecord">
+                    <i class="icon iconfont text-primary"></i>
+                    <span>兑换记录</span>
+                </a>
+            </div>
+            <div class="goods-list clearfix">
+                <ul>
+                    
+                       
+                    
+                    
+                </ul>
+            </div>
+            <p class="load-more">点击加载更多....</p>
+        </section>
+
+
+
+
+
+
+
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/swiper.jquery.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/common.js?hash=12"></script>
+        <script>
+        var user_id = '';
+//        $(".swiper-container").find('.swiper-wrapper').attr("href","integralChangeRecord.html?uid="+uid);
+//        var mySwiper = $('.swiper-container').swiper({
+//            mode: 'horizontal',
+//            pagination: '.swiper-pagination',
+//            loop: true,
+//            autoplay : 5000,
+//            observer: true,//修改swiper自己或子元素时，自动初始化swiper
+//            observeParents: true,//修改swiper的父元素时，自动初始化swiper
+//            paginationClickable: true
+//        });
+//        var swiper = new Swiper('.swiper-container', {
+//            loop:true,
+//            autoplay : 5000,
+//            pagination: '.swiper-pagination',
+//            paginationClickable: true
+//        });
+        $("#changeRecord").attr("href","integralChangeRecord.html?uid="+uid);
+        $.ajax({
+            url: '/wayu-rest/user/detail',
+            type: 'post',
+            dataType: 'json',
+            data: {uid:uid,token:token},
+            success:function(data){
+                var html = data.data.username+'<span class="text-primary">'+data.data.redites+'</span>积分';
+                $(".integral-sigle").html(html);
+            },
+        })
+         $.ajax({
+            url: '/creditshop/topBanners',
+            type: 'get',
+            dataType: 'json',
+            data: {appKey:1,timestamp:1,sign:1},
+            success:function(data){
+                var banner = '';
+                $.each(data.data,function(index,comment){
+                    console.debug(comment);
+                    banner += '<div class="swiper-slide"><a href="./goodsDetail.html?goodsId='+comment.id+'" title=""><img src="'+comment.banner+'"alt="'+comment.title+'"></a></div>'   ;             
+                });
+                $(".swiper-wrapper").html(banner);
+                swiper = new Swiper('.swiper-container', {
+                    loop:true,
+                    autoplay : 5000,
+                    pagination: '.swiper-pagination',
+                    paginationClickable: true
+                });
+            },
+        })
+        function goodsList(indexList) {
+            $.ajax({
+                url: '/creditshop/goodsList',
+                type: 'get',
+                dataType: 'json',
+                data: {page:indexList,pageSize:10, sign: 1},
+                success: function (data) {
+//                    $(".goods-list ul").empty();
+                    var html = '';
+                    // data.data.list 为数据例表数组
+                    $.each(data.data.list, function (index, comment) {
+//                        console.log(data.data);
+                        if (data.data.ismore==false) {
+                            $(".load-more").hide();
+                        }
+                        // index 为当前项的索引 comment为当前项
+                        html += '<li><a href="./goodsDetail.html?goodsId=' + comment.id + '"><img src="' + comment.thumbnail + '" alt="' + comment.title + '"><h4>' + comment.title + '</h4><div><i class="icon iconfont text-primary"></i><span class="text-primary">' + comment.redites + '</span><span class="goods-price">￥' + comment.price + '</span></div></a> </li>';
+                    });
+
+                    $(".goods-list ul").append(html);
+
+                },
+                error: function () {
+
+                }
+
+            })
+        }
+        var indexList = 1;
+        goodsList(indexList);
+        $(".load-more").on('click',function(){
+            indexList++;
+            goodsList(indexList);
+        })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body style="background:#fff">
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>新增收货地址</h3>
+        </header>
+        <!-- /header -->
+        <div class="award-get">
+            <ul class="num02">
+                 <li class="colorsix">收货人：<span id="name"><input type="text"  maxlength="20" style="font-size:12px;" id="username" data-error="不为空">
+                    <span class="error" id="errorname"></span></span></li>
+                <li class="colorsix">联系电话：<span id="telphone"><input type="text" id="phone" data-error="格式有误！" > <span class="error" style="font-size:12px;" id="errortel"></span></span></li>
+                <li class="colorsix clearfix">收货地址：
+                    <span class="address1" style="display:none"></span>
+                    <span class="address2" style="display:none"></span>
+                    <input id="address" type="hidden"  value="">     
+                    <span class="address">
+                        <div id="rovince">                      
+                            <select>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div id="city">
+                           <select>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div id="county">
+                           <select style="width:105%">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </span>         
+                        
+                </li>
+                    <li id="street">
+                    <input type="text" placeholder="街道详细地址 " style="font-size:12px;" maxlength="50" id="address_detail" data-error="不为空" >
+                    <span class="error" id="erroraddress"></span>
+                </li>
+                <li class="colorsix">邮编：<span id="postcode"></span></li>
+            </ul>
+            <a class="btn-primary button button-nomal" id='submit' href="javascript:void(0)">保存</a>
+        </div>
+    <script src="js/config.js"></script>
+    <script src="js/jquery2.1.1.js"></script>
+    <script src="js/swiper.jquery.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        var checkSubmitFlag=false;
+        $(function(){
+            $(".button-nomal").on('click',function(){               
+                   saveInfo();                            
+            })
+            //街道选择
+    function saveInfo(){
+         _val($("#username"));
+         _val($("#address_detail"));
+         _phone($("#phone"));
+        if(  $("#errorname").html() == '' && $("#errortel").html() =='' && $("#postcode").html()!='' && $("#erroraddress").html() ==''){
+            if(!checkSubmit()){
+               return false;
+            }
+            var a={id:-1,name:$("#username").val(),phoneNum:$("#phone").val(),area:$("#address").val(),street:$("#address_detail").val(),zipCode:$("#postcode").html(),isDefault:isDefault};
+            var  json1=JSON.stringify(a);
+              $.ajax({
+                url: '/creditshop/saveAddress/',
+                type: 'post',
+                dataType: 'json',
+                data: {uid:uid,token:token,data:json1,tenantid:tenent},
+                success:function(data){
+                    if(data.code=='0000')
+                    {
+                        alert("新增成功");
+                        if(goodsId){
+                            window.location.href="changeAddress.html?goodsId="+goodsId;
+                        }else{
+                            window.location.href="integralIndex.html";
+                        }
+                    }else{
+                        alert("新增失败");
+                        window.location.href="integralIndex.html";
+                    }
+                   
+
+                }
+              })
+        }else{
+            alert('保存失败')
+        }
+            
+            
+     }
+          $.ajax({
+                url: '/creditshop/getArea/',
+                type: 'post',
+                dataType: 'json',
+                data: {parentId:100000,uid:uid,token:token,tenantid:tenent},
+                success:function(data){
+                    var option = '';
+                    $.each(data.data,function(index,comment){  option += '<option value="'+comment.id+'">'+comment.name+'</option>';
+                    });
+                    $("#rovince select").html(option);
+                    city()
+                    $("#rovince select").change(function(){
+                        city();
+                    })
+                }
+            })
+          function city(){
+            $.ajax({
+                    url: '/creditshop/getArea/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {parentId:$("#rovince select").val(),uid:uid,token:token,tenantid:tenent},
+                    success:function(data){
+                        var option = '';
+                        $.each(data.data,function(index,comment){
+                            option += '<option value="'+comment.id+'">'+comment.name+'</option>';
+                        });
+                       $("#city select").html(option);
+                       county();
+                       $("#city select").change(function(){
+                        county();
+                       })        
+                        }               
+                    })
+          }
+       function county(){
+            $.ajax({
+                    url: '/creditshop/getArea/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {parentId:$("#city select").val(),uid:uid,token:token,tenantid:tenent},
+                    success:function(data){
+                        var option = '';
+                        $.each(data.data,function(index,comment){
+                            option += '<option value="'+comment.id+'" data-code="'+comment.zipCode+'">'+comment.name+'</option>';
+                        });
+                       $("#county select").html("<option id='sel_county' value='请选择区县'>请选择区县</option>"+option);
+                       $("#county select").change(function(){
+                        var newData = data.data;
+                        for(var i in newData){
+                            if(newData[i].id == $(this).val()){
+                                $("#postcode").html(newData[i].zipCode);
+                                $("#address").val(newData[i].mergerName);
+                            }
+                        }
+                    })
+                        }               
+                    })
+          }
+
+             //正则
+            
+            var phone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/; //电话
+            var reg =  /^\s*$/g; // 空
+            var vertival = false;
+             function _val(obj){
+                if(obj.val() == ''){
+                    obj.next().html(obj.data("error")); 
+                }else{
+                    obj.next().html('');
+                }
+            }
+            //用户名
+            $("#username").on("blur",function(){
+                _val($("#username"));
+            });
+            //街道地址
+            $("#address").on("blur",function(){
+                _val($("#address_detail"));
+            }); 
+            //电话号码           
+            function _phone(obj){
+                if(phone.test(obj.val())){
+                    obj.next().html('');
+                }else{
+                    obj.next().html(obj.data("error"));  
+                }
+            }
+            $("#phone").on("blur",function(){
+                _phone($("#phone"));
+            });
+           
+        })
+       function checkSubmit(){
+           if(!checkSubmitFlag){
+               checkSubmitFlag=true;
+               return true;
+           }else{
+               alert('不能重复提交');
+               return false;
+           }
+       }
+    </script>
+    </body>
+</html>

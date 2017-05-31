@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+    </style>
+    <body style="background:#fff">
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>兑换记录</h3>
+        </header>
+        <!-- /header -->
+        <section>
+            <ul class="integral-change-record">
+               
+            </ul>
+            <p class="load-more">加载更多....</p>
+        </section>
+        <!--<div style="border: 1px solid red; display: none;width: 200px; height: 200px; position: fixed; z-index: 100; top: 100px; margin-left: -100px; left: 50%;" id="please_attention"></div>-->
+        <script src="js/config.js"></script>
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/swiper.jquery.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/common.js"></script>
+        <script>
+        var indexList = 0;
+        if(storage.getItem('SourceID')=='null'){
+        }
+        else if(storage.getItem('SourceID').indexOf("appfactory_mobile")!=-1){
+            
+        }else if(params_count.length==2&&openid==0){
+            
+        }else{
+           getUserInfo(); 
+        }     
+        function getUserInfo(){
+            $.ajax({
+                url: '/creditshop/getUserInfo/',
+                type: 'post',
+                async : false,
+                dataType: 'json',
+                data: {openid:openid,tenantid: tenent},
+                success: function (data) {
+                    console.debug(data);
+                    if (data.code=='0007') {
+//                       $("#please_attention").css({
+//                           "display": 'block'
+//                       });
+                        alert('请先关注公众号,再进行兑换');
+                        var param=params.split("&");
+                        var str='';
+                        for(var i=0;i<param.length-2;i++){
+                            str+='&'+param[i];
+                        }
+                        var str=str.split('?');
+                        console.debug(param);
+                        console.debug(str[1]);
+                        var callbacks=window.location.href.split('?');
+                        var callback=callbacks[0];
+                        // location.href='http://cctv5.huiyuan-vip.sobeycloud.com/home/loginhtml/?callback='+callback+'?'+str[1];
+                        location.href=memberc_uri+'/home/loginhtml/?callback='+callback+'?'+str[1];
+                        exit;
+                    }else{
+                        if(uid=='undefined'||uid==null||token=='undefined'||token==null){
+                            alert('未登录请注册');
+                            var param=params.split("&");
+                            var str='';
+                            for(var i=0;i<param.length-2;i++){
+                                str+='&'+param[i];
+                            }
+                            var str=str.split('?');
+                            console.debug(param);
+                            console.debug(str[1]);
+                            var callbacks=(window.location.href).split('?');
+                            var callback=callbacks[0];
+                            // location.href='http://cctv5.huiyuan-vip.sobeycloud.com/home/loginhtml/?callback='+callback+'?'+str[1];
+                            location.href=memberc_uri+'/home/loginhtml/?callback='+callback+'?'+str[1];
+                            exit;
+                        }
+                    }
+                }
+            })
+        }
+        function goodsList(){
+              $.ajax({
+                url: '/creditshop/getOrdersList/',
+                type: 'post',
+                dataType: 'json',
+                data: {ordersSource:1,page:indexList,pageSize:10,uid:uid,token:token,tenantid:tenent},
+                success:function(data){
+                    console.debug(data);
+                   console.debug(data.data.length);
+                   if(data.data.length==0){
+                       alert('暂无兑换商品记录');
+                       history.back(-1);
+                       exit;
+                       window.location.href=host_server;
+                    }
+                    if(data.data.length<=9){
+                        console.debug(data.data.length);
+                        $(".load-more").hide();
+                    }
+                    if(data.code == 0000){
+                        var html = '';
+                        $.each(data.data,function(index,comment){
+                           var goodsInfo =  $.parseJSON(comment.goodsInfo);
+                           var shippingMethod = comment.shippingMethod == 1?'邮寄':'自取';
+                           if(comment.ordersStatus==1){
+                            var logisticsStatu = '<span class="text-primary">等待发货</span>';
+                           }else if(comment.ordersStatus==2){
+                            var logisticsStatu = '<span>已发货</span>';
+                           }else if(comment.ordersStatus==3){
+                            var logisticsStatu = '<span>已收货</span>';
+                           }else if(comment.ordersStatus==4){
+                            var logisticsStatu = '<span class="text-primary">未领取</span>';
+                           }else if(comment.ordersStatus==5){
+                            var logisticsStatu = '<span>已领取</span>';
+                           }else{
+                            var logisticsStatu = '<span>已过期</span>';
+                           }
+                           html += '<li class="clearfix"><a href="orderDetail.html?ordersNo='+comment.ordersNo+'"><img src="'+goodsInfo.imgUrl+'" class="fl" alt="'+goodsInfo.name+'"><h4>'+goodsInfo.name+'</h4> <div><i class="icon iconfont"></i><span>'+goodsInfo.credits+'</span></div><p>'+logisticsStatu+'<span class="fr">'+shippingMethod+'</span></p></a></li>';
+                        })
+                        $(".integral-change-record").append(html);
+                    }else{
+                        alert("错误");
+                        // history.back(-1);
+                    }
+                },
+                error:function(data){
+
+                  }
+            })
+        }
+        goodsList(indexList);
+        $(".load-more").on('click',function(){
+            indexList++;
+            goodsList(indexList);
+        })
+        $(function(){
+            var u = navigator.userAgent, app = navigator.appVersion;
+            //var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            if(isiOS){
+                var str='<div style="text-align:center;width:100%;font-size: 12px">所有活动及奖品与苹果公司无关。</div>';
+                $('body').append(str);
+            }
+
+        });
+        </script>
+    </body>
+</html>

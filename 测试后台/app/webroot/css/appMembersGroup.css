@@ -1,0 +1,75 @@
+.groupSet_des{border-bottom:1px solid #e7e7e7;padding-bottom:5px}
+.groupSet_des h3{height:28px;line-height:28px}
+.groupSet_des h3,.groupSet_des p{color:#999;font-family:'宋体'}
+.app_header_con button{margin-right:10px}
+.groupName{height:26px;line-height:26px;border:1px solid #e7e7e7;vertical-align:middle;width:80px}
+.padding0{padding:0;}
+.groupSection{width:50px;vertical-align:middle}
+table.groundtable tr td:first-of-type, table.groundtable tr th:first-of-type{padding:0px;text-indent:10px;vertical-align:middle;}
+table.groundtable input{height:24px}
+/* 选择图片和颜色 */
+.groupChoose{vertical-align:middle;position:relative;width:190px;border:1px solid #e7e7e7;height:24px;line-height:24px;display:inline-block;}
+.groupChoose:after{content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top:4px solid #cccccc ;
+    border-left:4px solid rgba(0,0,0,0);
+    border-right:4px solid rgba(0,0,0,0);
+    position: absolute;
+    right:5px;
+    top: 10px;}
+ .groupChoose:hover:after{ border-top:4px solid #000;}
+ .groupChoose img,.groupChoose span{width:30px;height:20px;margin-left:2px;margin-top:2px;display:inline-block}
+ .groupChoose span{background-color:#fff100}
+ #groupChoosePic_con,#groupChooseColor_con{border:1px solid #e7e7e7;position:absolute;display:none;background-color:#fff;height:55px} 
+ #groupChoosePic_con li{float:left;margin-right:5px}
+ #groupChoosePic_con li img{width:30px;height:20px;margin-left:2px;margin-top:2px;cursor:pointer}
+ #groupChooseColor_con{display:block}
+ #groupChooseColor_con li{float:left;margin-right:5px}
+ #groupChooseColor_con span{width:20px;height:20px;display:inline-block;}
+ /* 颜色插件样式覆盖 */
+ .sp-replacer{border:1px solid #e7e7e7;background-color:#fff}
+ .sp-preview{width:90px}
+ .sp-dd{color:#ccc;}
+ .sp-dd:hover{color:#000}
+ .sp-container button{margin-top:5px}
+ .oScrool{overflow:auto;}
+ /* 颜色插件样式覆盖 End */
+ .groupDisable{background-color:#eee}
+ .errorIntegral{border:1px solid red !important;}
+/*  .groupChoosePic_con,.groupChooseColor_con{display:none} */
+/* .groupChooseArrow{ } */
+.groundSet_imgwrap{height:30px;padding:2px 0;}
+.groundSet_imgwrap img{width:40px;height:30px;}
+
+.input_wrap{height:30px;line-height:30px}
+.inputRequired{color:red;vertical-align:middle;margin-right:5px}
+.ml5{margin-left:5px}
+
+/* 上传样式 */
+#source_list li{position:relative;float:left;margin-right:10px;height:90px;width:120px;margin-bottom:10px}
+#source_list li .up_del,.up_url_del,#source_list li .up_issue_del{display:inline-block;position:absolute;top:2px;right:2px;z-index:2;width:20px;height:20px;background-color: rgba(0, 0, 0, 0.5);color:#fff;font-size: 21px;font-family: tahoma, arial, 宋体;text-align:center;line-height:18px}
+#source_list li .up_url_del:hover,.up_del:hover,#source_list li .up_issue_del:hover{background-color:#000;}
+#source_list li img{width:120px;height:90px}
+#source_list li .filename{position:absolute;z-index:2;bottom:0;left:0;display:none}
+.progress-striped{position:absolute;bottom:0;left:0;z-index:2;width:118px}
+.up_status{position:absolute;height:24px;line-height:24px;color:#fff;top:0;left:0;padding:0 10px;display:none;}
+.up_issue{background-color:#CC6600}
+.up_success{background-color:#0099FF}
+.up_error{background-color:red}
+.up_wrap label{height:30px;line-height:30px}
+
+.fileUpBtn .webuploader-pick{
+/* background:none; */
+padding:0px;
+height:30px;
+line-height:30px;
+width:80px;
+color:#fff;
+border-radius:0;
+}
+.filePicWrap{height:30px;padding:10px 0 20px 0;}
+.filePicWrap p{margin-left:10px;line-height:30px;height:30px;color:#999}
+#filePic{float:left;}
+.groupIcon i{background-position:-380px -473px}

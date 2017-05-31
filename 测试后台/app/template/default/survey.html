@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="MobileOptimized" content="320"/>
+        <title>问卷调查</title>
+    </head>
+
+    <body>
+        <link href="{BASE_URL}/template/default/css/content_pc.css" rel="stylesheet" type="text/css" />
+        <div class="content_box">
+            <div class="cont-activity" style="background:url({BASE_URL}{$survey['pagebg_pic']}) no-repeat;">
+                <div class="tit">{$content['title']}</div>
+                <div class="detail">
+                    <!--{if !empty($options)}-->
+                    <!--{loop $options $option}-->
+                    <div>{$option['id']}.{$option['title']}</div>
+                    <div class="optbox-survey">
+                        <!--{if $option['type']=='fstring'}-->
+                        <input type="text" class="ipt" style="width:{$option['width']}px;" />
+                        <!--{elseif $option['type']=='ftext'}-->
+                        <textarea style="width:{$option['width']}px;height:{$option['height']}px;"></textarea>
+                        <!--{elseif $option['type']=='fradio'}-->
+                        <!--{loop $option['optList'] $opt}-->
+                        <div><input type="radio" value="{$opt['title']}" />&nbsp;{$opt['title']}</div>
+                        <!--{/loop}-->
+                        <!--{if $option['supplement']==1}-->
+                        <div>补充：<input type="text" class="ipt" style="width:210px;" /></div>
+                        <!--{/if}-->
+                        <!--{elseif $option['type']=='fcheckbox'}-->
+                        <!--{loop $option['optList'] $opt}-->
+                        <div><input type="checkbox" value="{$opt['title']}" />&nbsp;{$opt['title']}</div>
+                        <!--{/loop}-->
+                        <!--{if $option['supplement']==1}-->
+                        <div>补充：<input type="text" class="ipt" style="width:210px;" /></div>
+                        <!--{/if}-->
+                        <!--{elseif $option['type']=='fselect'}-->
+                        <select class="ipt" style="min-width:140px;height:auto;line-height:auto;">
+                            <!--{loop $option['optList'] $opt}-->
+                            <option>{$opt['title']}</option>
+                            <!--{/loop}-->
+                        </select>
+                        <!--{if $option['supplement']==1}-->
+                        <div>补充：<input type="text" class="ipt" style="width:210px;" /></div>
+                        <!--{/if}-->
+                        <!--{/if}-->
+                    </div>
+                    <!--{/loop}-->
+                    <!--{/if}-->
+                </div>
+                <br />
+                <div class="btn-actapply tc">提交问卷</div>
+                <div class="tc detail">报名截止日期：{date("Y-m-d H:i",$survey['end_time'])}</div>
+            </div>
+        </div>
+    </body>
+</html>

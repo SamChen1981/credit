@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body style="background:#fff">
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>兑换成功</h3>
+        </header>
+        <!-- /header -->
+        <div class="award-get">
+            <ul >
+                <li>恭喜您，兑换产品成功</li>
+                <li>订单号：<span id="ordersNo"></span></li>
+                <li class="text-default">请尽快兑换商品哦~</li>
+            </ul>
+         
+            <a class="btn-primary button button-nomal" id="visitDetail" href="">查看详情</a>
+            <a class=" button button-nomal button-two" href="integralIndex.html">返回商城首页</a>
+        </div>
+        <script src="js/config.js"></script>
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/swiper.jquery.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/common.js"></script>
+        <script>
+        $(function(){
+          
+            $("#ordersNo").html(ordersNo);
+             $.ajax({
+            url: '/creditshop/getOrdersInfo/',
+            type: 'post',
+            dataType: 'json',
+            data: {ordersNo:ordersNo,uid:uid,token:token,tenantid:tenent},
+            success:function(data){
+                $("#visitDetail").attr('href','orderDetail.html?ordersNo='+ordersNo)
+            }
+           })
+         })
+
+        </script>
+    </body>
+</html>

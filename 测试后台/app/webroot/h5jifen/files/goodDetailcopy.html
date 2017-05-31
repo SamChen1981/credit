@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/h5jifen/css/normalize.css">
+    <link rel="stylesheet" href="/h5jifen/css/iconfont.css">
+    <link rel="stylesheet" href="/h5jifen/css/style.css">
+    <link rel="stylesheet" href="/h5jifen/css/swiper.css">
+</head>
+<style>
+
+</style>
+<body>
+<?php echo $datas['product_name'];?>
+<header>
+    <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+    <h3><?php echo $data['title'];?></h3>
+
+</header>
+<!-- /header -->
+<div style="display: none" id="goodsId"><?php echo $datas['goodsId']?></div>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+
+
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<div class="order-change-bond">
+    <ul id="goods-detail">
+
+    </ul>
+    <ul>
+        <li class="clearfix">
+            <span>兑换规则</span>
+        </li>
+        <li class="clearfix goods-detail-list colorsix" id="goods-rule">
+
+        </li>
+
+    </ul>
+    <ul>
+        <li class="clearfix">
+            <span>商品简介</span>
+        </li>
+        <li class="clearfix goods-detail-list colorsix" id="goods-intro">
+
+        </li>
+
+    </ul>
+    <!-- 自提 -->
+    <ul id="gain-style">
+
+    </ul>
+
+</div>
+<!-- 蒙版 -->
+<div class="showbox">
+    <div class="content showbox-un">
+        <div>
+            你的积分不足，无法兑换
+        </div>
+        <p>知道了</p>
+    </div>
+    <div class="content showbox-success" >
+        <div id="integral">
+
+        </div>
+        <p class="clearfix">
+            <span>取消</span>
+            <a href="javascript:" title="" id="changeOk"><span class="text-primary">确认</span></a>
+        </p>
+    </div>
+</div>
+
+<div class="mart40" id="change_click">
+</div>
+
+
+<script src="/h5jifen/js/jquery2.1.1.js"></script>
+<script src="/h5jifen/js/swiper.jquery.min.js"></script>
+<script src="/h5jifen/js/jquery.cookie.js"></script>
+<script src="/h5jifen/js/common.js?hash=123345"></script>
+<script>
+    var goodsId=$("#goodsId").text();
+    // 幻灯片
+    var swiper = new Swiper('.swiper-container', {
+        loop:true,
+        autoplay : 5000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+    //弹框
+    $(function(){
+        $(".showbox .content p").on("click",function(){
+            $(".showbox").hide();
+        });
+    })
+    var gRedites = '';
+    var uRedites = '';
+    //         console.debug(uid);
+    //         console.debug(token);
+    $.ajax({
+        url: '/wayu-rest/user/detail',
+        type: 'post',
+        dataType: 'json',
+        data: {uid:2295,token:'73cef853e30f4fdea07d8775317a7d94'},
+        success:function(data){
+            console.debug(data);
+            if(data.code=='0000'){
+                uRedites = data.data.redites;
+            }else{
+                uRedites=-1;
+            }
+
+        },
+    })
+    $.ajax({
+        url: '/creditshop/goodsDetail/'+goodsId,
+        type: 'get',
+        dataType: 'json',
+        data:{sign:1,appKey:1,timestamp:1,},
+        success:function(data){
+            var banner = '';
+            $.each(data.data.imgs,function(index,comment){
+                banner += '<div class="swiper-slide"><img src="'+comment+'" alt=""></div>'   ;
+            });
+            $(".swiper-wrapper").html(banner);
+            swiper = new Swiper('.swiper-container', {
+                loop:true,
+                autoplay : 5000,
+                pagination: '.swiper-pagination',
+                paginationClickable: true
+            });
+            if(data.code=='0001'||data.code=='0002'){
+                alert('失败');
+                return false;
+            }
+            gRedites = data.data.redites;
+            var goods_detail = '<li class="clearfix goods-name" ><span>'+data.data.title+'</span><span class="fr text-primary"><i class="icon iconfont "></i>&nbsp;'+data.data.redites+'</span></li><li class="clearfix colorsix"><span>剩余'+data.data.stock+'件</span><span class="fr">市场价:'+data.data.price+'</span></li>';
+            $("#goods-detail").html(goods_detail);
+            var goods_rule = '<p>兑换时间：'+data.data.start+'-'+data.data.end+'</p><p>兑换限制：每人仅限'+data.data.num+'个</p>';
+            $("#goods-rule").html(goods_rule);
+            var goods_intro = data.data.description;
+            $("#goods-intro").html(goods_intro);
+            var integral = '兑换'+data.data.title+'需要消耗'+data.data.redites+'积分 <br>（当前可用积分'+uRedites+'）';
+            $("#integral").html(integral);
+            if(data.data.way=='1'){
+                var gain_style = '<li class="clearfix"><span>领取方式</span></li> <li class="clearfix"><span class="colorsix">本商品不送货上门，需自提</span> </li><li class="clearfix"><span>兑换地址</span><span class="fr colorsix" id="address">'+data.data.addr+'</span></li><li class="clearfix"> <span>联系人</span> <span class="fr colorsix" id="username">'+data.data.link+'</span></li> <li class="clearfix"><span>联系电话</span>  <span class="fr colorsix" id="telephone">'+data.data.phone+'</span></li>';
+                $("#gain-style").html(gain_style);
+                var name=data.data.link;
+                var address=data.data.addr;
+                var phone_num=data.data.phone;
+                function changeOk(){
+                    $.ajax({
+                        url: '/creditshop/exchange/'+goodsId,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {add_id: 1,name:name,token:token,user_id:uid,phone_num:phone_num,address:address,zip_code:111111,num:1,sign:1},
+                        success:function(data){
+                            console.log(data.code)
+                            if(data.code=='0000'){
+                                window.location.href='changeSuccess.html?ordersNo='+data.ordersNo;
+                            }else{
+                                alert('扣除积分失败');
+
+                            }
+
+                        }
+                    });
+                }
+                $("#changeOk").on('click',function(){
+                    changeOk();
+                })
+
+            }else if(data.data.way=='2'){
+                var gain_style = ' <li class="clearfix"><span>领取方式</span></li> <li class="clearfix"> <span class="colorsix">邮寄（免运费）</span> </li>';
+                $("#gain-style").html(gain_style);
+                $("#changeOk").attr('href','changeSuccessPost.html?goodsId='+goodsId);
+
+            }
+            //立刻兑换
+            if(data.data.activityState=='2'){
+                $("#change_click").html('<a href="javascript:" onclick="_change()" class="button-change button btn-primary">立刻兑换 </a>');
+            }else if(data.data.activityState=='1'){
+                $("#change_click").html('<a href="javascript:" class="button-change button btn-default">未开始 </a>');
+            }else{
+                $("#change_click").html('<a href="javascript:" class="button-change button btn-default" >已过期 </a>');
+            }
+        },
+    })
+    function _change(){
+        console.debug(uRedites);
+        console.debug(gRedites);
+        if(parseInt(uRedites,10) < parseInt(gRedites,10)){
+            $(".showbox").show();
+            $(".showbox-un").show();
+        }else if(parseInt(uRedites,10) >= parseInt(gRedites,10)){
+            $(".showbox").show();
+            $(".showbox-success").show();
+        }else{}
+
+    }
+</script>
+</body>
+</html>

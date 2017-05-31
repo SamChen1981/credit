@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/iconfont.css">
+    <link rel="stylesheet" href="../css/swiper.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<header>
+    <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+    <h3>积分商城</h3>
+</header>
+<div class="swiper-container swiper-container-horizontal">
+    <div class="swiper-wrapper" style="width: 100%; transition-duration: 0ms; transform: translate3d(-2416px, 0px, 0px); height: 310.5px;">
+        <?php foreach($datas['topbanner']['data'] as $key=>$value ):?>
+        <div class="swiper-slide" data-swiper-slide-index="0" style="width: 604px;">
+            <a href="creditf/goods_file_<?php echo $value['id'];?>.html?goodsId=<?php echo $value['id'];?>" title="">
+                <img src="<?php echo $value['banner'];?>" alt="<?php echo $value['title'];?>">
+            </a>
+        </div>
+        <?php endforeach;?>
+    </div>
+    <div class="swiper-pagination swiper-pagination-clickable">
+        <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+        <span class="swiper-pagination-bullet"></span>
+        <span class="swiper-pagination-bullet"></span>
+    </div>
+</div>
+<section>
+    <div class="integral-sigle mb10"></div>
+    <div class="mb10 integral-operate clearfix">
+        <!--<a href="integralGain.html">-->
+        <!--<i class="icon iconfont text-primary"></i>-->
+        <!--<span>赚积分</span>-->
+        <!--</a>-->
+        <a href="javascript:" id="changeRecord">
+            <i class="icon iconfont text-primary"></i>
+            <span>兑换记录</span>
+        </a>
+    </div>
+    <div class="goods-list clearfix">
+        <ul>
+            <?php foreach($datas['goodslist']['data']['list'] as $key=>$value):?>
+            <li>
+                <div class="goodssize" style="height: 277px; width: 277px;">
+                    <a href="creditf/goods_file_<?php echo $value['Product']['id'];?>.html?goodsId=<?php echo $value['Product']['id'];?>">
+                        <img src="<?php echo PIC_URL;?><?php echo $value['Product']['thumbnail'];?>" alt="<?php echo $value['Product']['title'];?>">
+                    </a>
+                </div>
+                <h4>
+                    <a href="creditf/h5jifen/files/default/goods_file_<?php echo $value['Product']['id'];?>.html?goodsId=<?php echo $value['Product']['id'];?>"><?php echo $value['Product']['title'];?></a>
+                </h4>
+                <div>
+                    <a href="creditf/goods_file_<?php echo $value['Product']['id'];?>.html?goodsId=<?php echo $value['Product']['id'];?>">
+                        <i class="icon iconfont text-primary"></i>
+                        <span class="text-primary"><?php echo $value['Product']['redites'];?></span>
+                        <span class="goods-price">￥<?php echo $value['Product']['price'];?></span></a>
+                </div>
+            </li>
+            <?php endforeach;?>
+            </ul>
+    </div>
+</section>
+<script src="../js/config.js"></script>
+<script src="../js/jquery2.1.1.js"></script>
+<script src="../js/swiper.jquery.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/common.js?hash=12"></script>
+<script src="../js/jquery.base64.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+     var user_id = '';
+        $("#changeRecord").attr("href","integralChangeRecord.html?uid="+uid+"&token="+token);
+        //        if(token==null||token==""){
+        //  
+        if(storage.getItem('SourceID')=='null'){
+            getmember();
+        }else if(storage.getItem('SourceID').indexOf("appfactory_mobile")!=-1){
+            getmember();
+        }else if(params_count.length==2&&openid==0){
+            getmember();
+        }else{
+           getUserInfo();
+        }
+        function getmember(){
+            $.ajax({
+                url: '/creditshop/getMember/',
+                type: 'post',
+                dataType: 'json',
+                data: {uid: uid, token: token, tenantid: tenent},
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == 0000) {
+                        console.debug(data);
+                        var html = data.data.nickname + '<span class="text-primary">' + data.data.redites + '</span>积分';
+                        $(".integral-sigle").html(html);
+                        $("#changeRecord").attr("href","integralChangeRecord.html?uid="+uid+"&token="+token);
+                    }
+                }
+            })
+        }
+        function getUserInfo(){
+            $.ajax({
+                url: '/creditshop/getUserInfo/',
+                type: 'post',
+                dataType: 'json',
+                data: {openid:openid,tenantid: tenent},
+                success: function (data) {
+                    console.debug(data);
+                    if (data.code == 0000) {
+                        console.debug(data);
+                        var html = data.data.nickname + '<span class="text-primary">' + data.data.integral + '</span>积分';
+                        $(".integral-sigle").html(html);
+                        $("#changeRecord").attr("href","integralChangeRecord.html?uid="+uid);
+                    }
+                }
+            })
+        }
+    var swiper = new Swiper('.swiper-container',{
+        loop:true,
+        autoplay : 5000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        paginationBulletRender: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+        }
+    });
+    $(function(){
+        var u = navigator.userAgent, app = navigator.appVersion;
+        //var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isiOS){
+            var str='<div style="text-align:center;width:100%;font-size: 12px">所有活动及奖品与苹果公司无关。</div>';
+            $('body').append(str);
+        }
+
+    });
+    var width=document.body.clientWidth;
+    var height=width*0.5;
+    $(".swiper-wrapper").height(height);
+    var li_width=$(".goods-list li").width();
+    var bl=16/9;
+    var li_height=li_width/bl;
+    $(".goods-list li .goodssize").height(li_width);
+    $(".goods-list li .goodssize").width(li_width);
+    $(window).resize(function(){
+        var width=document.body.clientWidth;
+        var height=width*0.5;
+        $(".swiper-wrapper").height(height);
+        var li_width=$(".goods-list li").width();
+        var bl=16/9;
+        var li_height=li_width/bl;
+        $(".goods-list li .goodssize").height(li_width);
+        $(".goods-list li .goodssize").width(li_width);
+    });
+    $(".swiper-container .swiper-wrapper .swiper-slide a").each(function(index,element){
+        var topurl=$(this).attr('href');
+        $(this).attr('href',(topurl+'&WeChatID='+weid));
+    })
+
+    $(".goods-list ul li div a").each(function(index,element){
+             var url=$(this).attr('href');
+             $(this).attr('href',(url+'&WeChatID='+weid));
+    })
+</script>
+        <script>
+        $.ajax({
+            url: '/creditshop/getSignPackage/',
+            type: 'post',
+            dataType: 'json',
+            data: {tenantid:tenent,weid: weid},
+            success: function (data) {
+            console.debug(data);
+            console.debug(data.appId);
+            var tid=tenent;
+            var wid=weid;
+            wx.config({
+                debug: false,
+                appId: data.appId,
+                timestamp: data.timestamp,
+                nonceStr: data.nonceStr,
+                signature: data.signature,
+                jsApiList: [
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'onMenuShareQZone',
+                ]
+            });
+            var shareTitle = '积分商城';
+            var shareDesc = '积分商城';
+            // var shareImgUrl = 'http://'+tid+'.jifen-vip.sobeycloud.com/images/share.jpg';
+            var shareImgUrl = 'http://'+tid+'.'+host_name+'/images/share.jpg';
+            // var urls='http://'+tid+'.jifen-vip.sobeycloud.com';
+            var urls='http://'+tid+'.'+host_name;
+            var baseurl=$.base64.encode(urls);
+            // var shareLink='http://'+tid+'.mpv3-vip.sobeycloud.com/OP/'+tid+'/'+wid+'/b/?U0='+baseurl;
+            var shareLink='http://'+tid+'.'+wechat_name+'/OP/'+tid+'/'+wid+'/b/?U0='+baseurl;
+            wx.ready(function () {
+                // 在这里调用 API
+                wx.showOptionMenu();
+                /*wx.hideMenuItems({
+                 menuList: ['menuItem:share:appMessage','menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:share:facebook','menuItem:share:QZone'],
+                 });*/
+                // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+                wx.onMenuShareAppMessage({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击发送给朋友');
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到朋友圈');
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareQQ({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到QQ');
+                    },
+                    complete: function (res) {
+                        //alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareWeibo({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到微博');
+                    },
+                    complete: function (res) {
+                        //alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareQZone({
+                    title: shareTitle, // 分享标题
+                    desc: shareDesc, // 分享描述
+                    link: shareLink, // 分享链接
+                    imgUrl: shareImgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        }
+    })
+
+
+
+
+    //wx.error(function(res){
+    //alert(JSON.stringify(res));
+    // });
+</script>
+</body>
+</html>

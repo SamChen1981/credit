@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="MobileOptimized" content="320"/>
+    <title>sdfasdfads_文章</title>
+    <script src="/template/default/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <style>
+        body img{
+            width:100% !important;
+            margin: 0px auto;
+            display: block;
+            height: auto !important;
+        }
+    </style>
+</head>
+
+<body>
+<link href="/template/default/css/content_pc.css" rel="stylesheet" type="text/css" />
+<link href="/template/default/css/img.css" rel="stylesheet" type="text/css" />
+<!--内容部分-->
+<article class="content_box">
+    <h1>sdfasdfads</h1>
+    <div id="con_id" style="display: none">1739</div>
+    <time><span style="margin-right: 20px; font-size: 12px;">来源:</span>2016年06月25日 14:11</time>
+    　　    <div class="text" style="word-break:break-all;word-wrap:break-word;text-align:left;font-size:19px;line-height:28px;margin-left:3%;margin-right:2%;width:95%;word-spacing:0px;letter-spacing: 1px;">
+    　　      <p>sdfadsfadsf</p>    <a href="http://hicms.sltv.net:8080/sl/download.html"><img src="http://upload.sltv.net/2016/0607/1465281163816.jpg"></a>
+</div>
+</article>
+<script>
+    var maxsize = 0;
+    function bigFontSize() {
+        if (maxsize <= 5) {
+            $('*').css({
+                'font-size': function(index, value) {
+                    var size = parseInt(value);
+                    size += 4;
+                    return size + 'px';
+                },
+                'line-height': function(index, value) {
+                    var size_2 = parseInt(value);
+                    size_2 += 3;
+                    return size_2 + 'px';
+                }
+            });
+            maxsize++;
+
+        }
+        return maxsize;
+    }
+    function smallFontSize() {
+        if (maxsize <= 5) {
+            $('*').css({
+                'font-size': function(index, value) {
+                    var size = parseInt(value);
+
+                    size -= 4;
+                    return size + 'px';
+                },
+                'line-height': function(index, value) {
+                    var size_2 = parseInt(value);
+                    size_2 -= 3;
+                    return size_2 + 'px';
+                }
+            });
+            maxsize--;
+        }
+        return maxsize;
+    }
+</script>
+<script>
+    $(function(){
+//            var url=window.location.pathname;
+//            var url=url.split('/');
+//            var url=url[url.length-1];
+//            var url=url.split(/[_ .]/);
+//            if(url.length>=2){
+//                var id=url[url.length-2];
+//            }
+        var id=$("#con_id").text();
+        var url="/sltvsvc/dataService/index?app=mobile&controller=tongji&action=downloadCount&id="+id;
+        $.get(url,function(data){
+            console.debug(data);
+        });
+    })
+</script>

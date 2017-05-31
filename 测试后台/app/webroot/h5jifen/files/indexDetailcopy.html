@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/h5jifen/css/normalize.css">
+    <link rel="stylesheet" href="/h5jifen/css/iconfont.css">
+    <link rel="stylesheet" href="/h5jifen/css/style.css">
+    <link rel="stylesheet" href="/h5jifen/css/swiper.css">
+</head>
+<style>
+
+</style>
+<body>
+<header>
+    <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+    <h3>积分商城</h3>
+</header>
+<!-- /header -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+
+
+
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<section>
+    <div class="integral-sigle mb10">
+    </div>
+    <div class="mb10 integral-operate clearfix">
+        <!--<a href="integralGain.html">-->
+        <!--<i class="icon iconfont text-primary"></i>-->
+        <!--<span>赚积分</span>-->
+        <!--</a>-->
+        <a href="javascript:" id="changeRecord">
+            <i class="icon iconfont text-primary"></i>
+            <span>兑换记录</span>
+        </a>
+    </div>
+    <div class="goods-list clearfix">
+        <ul>
+
+
+
+
+        </ul>
+    </div>
+</section>
+
+
+
+
+
+
+<script src="/h5jifen/js/jquery2.1.1.js"></script>
+<script src="/h5jifen/js/swiper.jquery.min.js"></script>
+<script src="/h5jifen/js/jquery.cookie.js"></script>
+<script src="/h5jifen/js/common.js?hash=12"></script>
+<script>
+    var user_id = '';
+    $("#changeRecord").attr("href","integralChangeRecord.html?uid="+uid);
+    $.ajax({
+        url: '/wayu-rest/user/detail',
+        type: 'post',
+        dataType: 'json',
+        data: {uid:uid,token:token,tenantid:tenent},
+        success:function(data){
+            console.debug(data);
+            var html = data.data.nickname+'<span class="text-primary">'+data.data.redites+'</span>积分';
+            $(".integral-sigle").html(html);
+        },
+    })
+    $.ajax({
+        url: '/creditshop/topBanners?tenantid='+tenent,
+        type: 'get',
+        dataType: 'json',
+        data: {appKey:1,timestamp:1,sign:1},
+        success:function(data){
+            var banner = '';
+            $.each(data.data,function(index,comment){
+                banner += '<div class="swiper-slide" style="width:100%;"><a href="./goodsDetail.html?goodsId='+comment.id+'" title=""><img src="'+comment.banner+'"alt="'+comment.title+'"></a></div>'   ;
+            });
+            $(".swiper-wrapper").html(banner);
+            swiper = new Swiper('.swiper-container', {
+                loop:true,
+                autoplay : 5000,
+                pagination: '.swiper-pagination',
+                paginationClickable: true
+            });
+
+        },
+    })
+
+
+    $.ajax({
+        url: '/creditshop/goodsList?tenantid='+tenent,
+        type: 'get',
+        dataType: 'json',
+        data: {page: 1, pageSize: 10,sign:1},
+        success: function(data){
+            $(".goods-list ul").empty();
+            var html = '';
+            // data.data.list 为数据例表数组
+            $.each(data.data.list,function(index,comment){
+                console.log(index, comment);
+                // index 为当前项的索引 comment为当前项
+                html += '<li><a href="./goodsDetail.html?goodsId='+comment.id+'"><img src="'+comment.thumbnail+'" alt="'+comment.title+'"><h4>'+comment.title+'</h4><div><i class="icon iconfont text-primary"></i><span class="text-primary">'+comment.redites+'</span><span class="goods-price">￥'+comment.price+'</span></div></a> </li>';
+            });
+
+            $(".goods-list ul").html(html);
+
+        },
+        error:function(){
+
+        }
+
+    })
+    $(function(){
+        var u = navigator.userAgent, app = navigator.appVersion;
+        //var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isiOS){
+            var str='<div style="text-align:center;width:100%;font-size: 12px">所有活动及奖品与苹果公司无关。</div>';
+            $('body').append(str);
+        }
+
+    });
+</script>
+</body>
+</html>

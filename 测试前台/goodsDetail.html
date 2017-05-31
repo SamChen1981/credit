@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body>
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>商品详情</h3>
+            
+        </header>
+        <!-- /header -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+            
+            
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="order-change-bond">
+            <ul id="goods-detail">
+               
+            </ul>
+            <ul>
+                <li class="clearfix">
+                    <span>兑换规则</span>
+                </li>
+                <li class="clearfix goods-detail-list colorsix" id="goods-rule">
+                    
+                </li>
+            </ul>
+            <ul>
+                <li class="clearfix">
+                    <span>商品简介</span>
+                </li>
+                <li class="clearfix goods-detail-list colorsix" id="goods-intro">
+                    
+                </li>
+                
+            </ul>
+            <!-- 自提 -->
+            <ul id="gain-style">
+               
+            </ul>  
+          
+        </div>
+        <!-- 蒙版 -->
+        <div class="showbox">
+            <div class="content showbox-un">
+                <div>
+                   你的积分不足，无法兑换
+                </div>
+                <p>知道了</p>
+            </div>
+            <div class="content showbox-success" >
+                <div id="integral" style="padding-top:25px;">
+                    <span id="integralSpan1"></span>
+                    <span style="display:block;"></span>
+                    <span></span>
+                </div>
+                <p class="clearfix">
+                    <span>取消</span>
+                    <a href="javascript:" title="" id="changeOk"><span class="text-primary">确认</span></a>
+                </p>
+            </div>
+        </div>
+        <!-- 蒙版 -->
+        <div class="showbox1">
+            <div class="content showbox-un">
+                <div>
+                    你的积分不足，无法兑换sdfasdfa
+                </div>
+                <p>知道了</p>
+            </div>
+        </div>
+        <div class="mart40" id="change_click">
+        </div>
+        <script src="js/config.js"></script>
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/swiper.jquery.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+         <script src="js/common.js?hash=123345"></script>
+         <script src="../js/jquery.base64.js"></script>
+         <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script>
+        // 幻灯片
+         var swiper = new Swiper('.swiper-container', {
+            loop:true,
+            autoplay : 5000,
+            pagination: '.swiper-pagination',
+            paginationClickable: true
+        });
+         //弹框
+         $(function(){
+            $(".showbox .content p").on("click",function(){
+                $(".showbox").hide();
+            });
+         })
+
+         var gRedites = '';
+         var uRedites = '';
+         $.ajax({
+                    url: '/creditshop/getMember/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {uid:uid,token:token,tenantid:tenent},
+                    success:function(data){
+                        if(data.code=='0000'){
+                            uRedites = data.data.redites;
+                        }else{
+                            uRedites=-1;
+                        }
+
+                    },
+                })
+         $.ajax({
+             url: '/creditshop/goodsDetail/'+goodsId+'?tenantid='+tenent,
+             type: 'get',
+             dataType: 'json',
+             data:{sign:1,appKey:1,timestamp:1,},
+             success:function(data){
+                 var banner = '';
+                $.each(data.data.imgs,function(index,comment){
+                    console.debug(comment);
+                    banner += '<div class="swiper-slide"><img src="'+comment+'" alt=""></div>'   ;
+                });
+                $(".swiper-wrapper").html(banner);
+                swiper = new Swiper('.swiper-container', {
+                    loop:true,
+                    autoplay : 5000,
+                    pagination: '.swiper-pagination',
+                    paginationClickable: true
+                });
+                if(data.code=='0001'||data.code=='0002'){
+                    alert('失败');
+                    return false;
+                }
+                var mydate = new Date(data.data.start);
+                var data_start=mydate.getFullYear()+'-'+(parseInt(mydate.getMonth())+1)+'-'+mydate.getDate();
+                var mydate = new Date(data.data.end);
+                var data_end=mydate.getFullYear()+'-'+(parseInt(mydate.getMonth())+1)+'-'+mydate.getDate();
+                gRedites = data.data.redites;
+                var goods_detail = '<li class="clearfix goods-name" ><span>'+data.data.title+'</span><span class="fr text-primary"><i class="icon iconfont "></i>&nbsp;'+data.data.redites+'</span></li><li class="clearfix colorsix"><span>剩余'+data.data.stock+'件</span><span class="fr">市场价:'+data.data.price+'</span></li>';
+                $("#goods-detail").html(goods_detail);
+                if(data.data.num==0){
+                    var goods_rule = '<p>兑换时间：'+data.data.start.substr(0,10)+'至'+data.data.end.substr(0,10)+'</p><p>兑换限制：不限制兑换个数</p><p>注意：商品进行兑换后，扣除的积分将不会被返还。</p>'; 
+                }else{
+                   var goods_rule = '<p>兑换时间：'+data.data.start.substr(0,10)+'至'+data.data.end.substr(0,10)+'</p><p>兑换限制：每人仅限'+data.data.num+'个</p><p>注意：商品进行兑换后，扣除的积分将不会被返还。</p>'; 
+                }      
+                 $("#goods-rule").html(goods_rule);
+                var goods_intro = data.data.description;
+                $("#goods-intro").html(goods_intro);
+                var integral = '兑换'+data.data.title;
+                var integral1 = '需要消耗'+data.data.redites+'积分';
+                var integral2 =  '(当前可用积分'+uRedites+')';
+                $("#integral>span:eq(0)").html(integral);
+                $("#integral>span:eq(1)").html(integral1);
+                $("#integral>span:eq(2)").html(integral2);
+                if(data.data.way=='1'){
+                    var gain_style = '<li class="clearfix"><span>领取方式</span></li> <li class="clearfix"><span class="colorsix">本商品不送货上门，需自提</span> </li><li class="clearfix"><span>兑换地址</span><span class="fr colorsix" id="address">'+data.data.addr+'</span></li><li class="clearfix"> <span>联系人</span> <span class="fr colorsix" id="username">'+data.data.link+'</span></li> <li class="clearfix"><span>联系电话</span>  <span class="fr colorsix" id="telephone">'+data.data.phone+'</span></li>';
+                    $("#gain-style").html(gain_style);
+                    var name=data.data.link;
+                    var address=data.data.addr;
+                    var phone_num=data.data.phone;
+                    function changeOk(){
+                        $.ajax({
+                        url: '/creditshop/exchange/'+goodsId+'?tenantid='+tenent,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {add_id: 1,name:name,token:token,user_id:uid,phone_num:phone_num,address:address,zip_code:111111,num:1,sign:1},
+                       success:function(data){
+                        console.debug(data);
+                        if(data.code=='0000'){
+                            window.location.href='changeSuccess.html?ordersNo='+data.ordersNo;
+                        }else{
+                             $(".showbox1 .content p")
+                             {
+                                        var content= $(".showbox1 .content div").text();
+                                        $(".showbox1 .showbox-un div").text(data.description);
+                                        $(".showbox1").show();
+                                        $(".showbox-un").show();
+                                        $(".showbox1 .content p").on("click",function(){
+                                             $(".showbox1").hide();
+                                         });
+                             };
+                          }
+                        }
+                  });
+                     }
+                     $("#changeOk").on('click',function(){
+                        changeOk();
+                     })
+                    
+                }else if(data.data.way=='2'){
+                    var gain_style = ' <li class="clearfix"><span>领取方式</span></li> <li class="clearfix"> <span class="colorsix">邮寄（免运费）</span> </li>';
+                    $("#gain-style").html(gain_style);
+                    $("#changeOk").attr('href','changeSuccessPost.html?goodsId='+goodsId);
+                }
+                //立刻兑换
+                if(data.data.activityState=='2'){
+                    $("#change_click").html('<a href="javascript:" onclick="_change()" class="button-change button btn-primary">立刻兑换 </a>');
+                }else if(data.data.activityState=='1'){
+                    $("#change_click").html('<a href="javascript:" class="button-change button btn-default">未开始 </a>');
+                }else{
+                    $("#change_click").html('<a href="javascript:" class="button-change button btn-default" >已过期 </a>');
+                }
+             },
+         })
+       function _change(){
+           if(uid=='undefined'||uid==null||token=='undefined'||token==null){
+               alert('未登录请注册');
+               var param=params.split("&");
+               var str='';
+               for(var i=0;i<param.length-2;i++){
+                   str+='&'+param[i];
+               }
+               var str=str.split('?');
+               console.debug(param);
+               console.debug(str[1]);
+               //document.write('http://cctv5.huiyuan-vip.sobeycloud.com/home/loginhtml/?callback='+window.location.href+'&'+str[1]);
+               // location.href='http://cctv5.huiyuan-vip.sobeycloud.com/home/loginhtml/?callback='+window.location.href+'&'+str[1];
+               location.href=memberc_uri+'/home/loginhtml/?callback='+window.location.href+'&'+str[1];
+           }else{
+                       console.debug(uRedites);
+                       if(parseInt(uRedites,10) < parseInt(gRedites,10)){
+                           $(".showbox").show();
+                           $(".showbox-un").show();
+                       }else if(parseInt(uRedites,10) >= parseInt(gRedites,10)){
+                           $(".showbox").show();
+                           $(".showbox-success").show();
+                       }else{}
+                   }
+        }
+        $(function(){
+            var u = navigator.userAgent, app = navigator.appVersion;
+            //var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            if(isiOS){
+                var str='<div style="text-align:center;width:100%;font-size: 12px">所有活动及奖品与苹果公司无关。</div>';
+                $('body').append(str);
+            }
+
+        });
+        var width=document.body.clientWidth;
+        var height=width*0.5;
+        $(".swiper-container").height(height);
+        $(window).resize(function(){
+            var width=document.body.clientWidth;
+            var height=width*0.5;
+            $(".swiper-container").height(height);
+        });
+        </script>
+        <script>
+    $.ajax({
+        url: '/creditshop/getSignPackage/',
+        type: 'post',
+        dataType: 'json',
+        data: {tenantid: tenent, weid: weid},
+        success: function (data) {
+            var tid = tenent;
+            var wid = weid;
+            wx.config({
+                debug: false,
+                appId: data.appId,
+                timestamp: data.timestamp,
+                nonceStr: data.nonceStr,
+                signature: data.signature,
+                jsApiList: [
+                    'hideOptionMenu',
+                    'showOptionMenu',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'hideMenuItems',
+                    'showMenuItems',
+                    'hideAllNonBaseMenuItem',
+                    'showAllNonBaseMenuItem',
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'onMenuShareQQ',
+                    'onMenuShareWeibo',
+                    'onMenuShareQZone',
+                ]
+            });
+
+            var shareTitle = '积分商城';
+            var shareDesc = '积分商城';
+            // var shareImgUrl = 'http://' + tid + '.jifen-vip.sobeycloud.com/images/share.jpg';
+            var shareImgUrl = 'http://' + tid + '.jifen-vip.sobeycloud.com/images/share.jpg';
+            // var urls = 'http://' + tid + '.jifen-vip.sobeycloud.com/files/default/goods_file_' + goodsId + '.html?goodsId=' + goodsId;
+            var urls = 'http://' + tid + '.'+host_name+'/goodsDetail.html?goodsId=' + goodsId;
+            var baseurl = $.base64.encode(urls);
+            // var shareLink = 'http://' + tid + '.mpv3-vip.sobeycloud.com/OP/' + tid + '/' + wid + '/b/?U0=' + baseurl;
+            var shareLink='http://'+tid+'.'+wechat_name+'/OP/'+tid+'/'+wid+'/b/?U0='+baseurl;
+
+            wx.ready(function () {
+                // 在这里调用 API
+                wx.showOptionMenu();
+                /*wx.hideMenuItems({
+                 menuList: ['menuItem:share:appMessage','menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:share:facebook','menuItem:share:QZone'],
+                 });*/
+                // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+                wx.onMenuShareAppMessage({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击发送给朋友');
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到朋友圈');
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareQQ({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到QQ');
+                    },
+                    complete: function (res) {
+                        //alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareWeibo({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: shareImgUrl,
+                    trigger: function (res) {
+                        //alert('用户点击分享到微博');
+                    },
+                    complete: function (res) {
+                        //alert(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        //alert('已分享');
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareQZone({
+                    title: shareTitle, // 分享标题
+                    desc: shareDesc, // 分享描述
+                    link: shareLink, // 分享链接
+                    imgUrl: shareImgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        }
+    });
+
+
+    //wx.error(function(res){
+    //alert(JSON.stringify(res));
+    // });
+</script>
+    </body>
+</html>

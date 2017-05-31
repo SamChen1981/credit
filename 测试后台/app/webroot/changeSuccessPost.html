@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/iconfont.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/swiper.css">
+    </head>
+    <style>
+ 
+    </style>
+    <body style="background:#fff">
+        <header>
+            <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+            <h3>商品兑换</h3>
+        </header>
+        <!-- /header -->
+        <div class="award-get">
+            <ul class="num01" id="goods">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul class="addClass">
+                <li>收货地址：<a href="##" id="changeAddress"><span class="fr colorblue">修改</span></a></li>
+               <li class="colorsix">收货人：<span id="name"><input type="text" placeholder="十三少" maxlength="20" id="username" data-error="不为空">
+                    <span class="error" id="errorname"></span></span></li>
+                <li class="colorsix">联系电话：<span id="telphone"><input type="text" placeholder="qq131313" id="phone" data-error="格式有误！" > <span class="error" id="errortel"></span></span></li>
+                <li class="colorsix clearfix">收货地址：
+                    <span class="address1" style="display:none"></span>
+                    <span class="address2" style="display:none"></span>
+                    <input id="address" type="hidden" value="">     
+                    <span class="address" style="display:none">
+                        <div id="rovince">
+                            
+                            <select>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div id="city">
+                           <select>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div id="county">
+                           <select>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </span>         
+                        
+                </li>
+                    <li id="street">
+                    <input type="text" placeholder="街道详细地址 " maxlength="50" id="address_detail" data-error="不为空">
+                     <span class="error" id="erroraddress"></span>
+                </li>
+                <li class="colorsix">邮编：<span id="postcode"></span></li>
+            </ul>
+            <!-- changeSuccess.html -->
+            <a class="btn-primary button button-nomal" href="javascript:" >提交</a>
+        </div>
+        <script src="js/jquery2.1.1.js"></script>
+        <script src="js/swiper.jquery.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/common.js"></script>
+        <script>
+       
+
+ //街道选择
+        $(function(){
+             id = id != null ?id:'-1';
+        $.ajax({
+            url: '/wayu-rest/user/selectReceivAddress',
+            type: 'post',
+            dataType: 'json',
+            data: {id: id,uid:uid,token:token},
+            success:function(data){
+                if(!data.data){
+                    $(".addClass").addClass("num02");
+                    $(".address").show();
+                    $("#changeAddress .colorblue").hide();
+                    $(".button-nomal").on('click',function(){
+                        saveInfo();
+                        saveAddress();
+                    })
+
+                }else{
+                    if(id=='-1'){
+                        $.each(data.data,function(index,comment){
+                            function addressFill(){
+                                $("#username").val(comment.name);
+                                $("#phone").val(comment.phoneNum);
+                                $("#addressDetail").html('');
+                                $(".address1").show();
+                                $(".address2").show();
+                                $("#address").val(comment.area+comment.street);
+                                $(".address1").html(comment.area);
+                                $(".address2").html(comment.street);
+                                $("#postcode").html(comment.zipCode);
+                                $("#street").remove();
+                            }
+                        if(comment.isDefault==1){
+                           addressFill();
+                           return false;
+                        }else{
+                            addressFill()
+                        }
+                       })
+                    $(".button-nomal").on('click',function(){
+                        saveAddress();
+                       })
+                    }else{
+                        $("#username").val(data.data.name);
+                        $("#phone").val(data.data.phoneNum);
+                        $("#addressDetail").html('');
+                        $(".address1").show();
+                        $(".address2").show();
+                        $("#address").val(data.data.area+data.data.street);
+                        $(".address1").html(data.data.area);
+                        $(".address2").html(data.data.street);
+                        $("#postcode").html(data.data.zipCode);
+                        $("#street").remove();
+                        $(".button-nomal").on('click',function(){
+
+                        saveAddress();
+                    })
+                    }
+                      
+                }               
+                    }
+        })
+
+        $("#changeAddress").attr("href","changeAddress.html?goodsId="+goodsId);
+         $.ajax({
+                 url: '/creditshop/goodsDetail/'+goodsId,
+                 type: 'get',
+                 dataType: 'json',
+                 data:{sign:1,appKey:1,timestamp:1},
+                 success:function(data){
+                 $("#goods  li:eq(1)").html("兑换积分："+data.data.redites);
+                 if(data.data.way=='1'){
+                    $("#goods  li:eq(2)").html("配送方式：自领");
+                 }else if(data.data.way=='2'){
+                     $("#goods  li:eq(2)").html("配送方式：邮寄(免运费)");
+                 }
+                $("#goods  li:eq(0)").html("奖品名称："+data.data.title);
+
+                    },
+            });
+
+         function saveAddress(){
+            addresst = $("#address").val()+$("#postcode").html();
+
+            $.ajax({
+                url: '/creditshop/exchange/'+goodsId,
+                type: 'post',
+                dataType: 'json',
+                data: {add_id: 1,name:$("#username").val(),token:token,user_id:uid,phone_num:$("#phone").val(),address:addresst,zip_code:$("#postcode").html(),num:1,sign:1},
+                success:function(data){
+                    if(data.code=='0000'){
+                    window.location.href='changeSuccess.html?ordersNo='+data.ordersNo;
+                }else{
+                    alert('扣除积分失败')
+                }
+                }
+            });
+                
+         }
+         function saveInfo(){
+                 _val($("#username"));
+                 _val($("#address_detail"));
+                 _phone($("#phone"));
+                if(  $("#errorname").html() == '' && $("#errortel").html() =='' && $("#postcode").html()!='' && $("#erroraddress").html() ==''){
+                    var a={id:-1,name:$("#username").val(),phoneNum:$("#phone").val(),area:$("#address").val(),street:$("#address_detail").val(),zipCode:$("#postcode").html(),isDefault:1};
+                    var  json1=JSON.stringify(a);
+                      $.ajax({
+                        url: '/wayu-rest/user/saveReceivAddress',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {uid:uid,token:token,data:json1},
+                        success:function(data){
+                            if(data.code=='0000')
+                            {
+                                console.log('保存成功')
+                            }else{
+                                alert('保存失败')
+
+                            }
+                        }
+                      })
+                }else{
+                    alert('保存失败')
+                }
+                    
+                    
+             }
+
+
+            function rovince(){
+                $.ajax({
+                    url: '/wayu-rest/user/getArea',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {parentId:100000,uid:uid,token:token},
+                    success:function(data){
+                        var option = '';
+                        $.each(data.data,function(index,comment){  option += '<option value="'+comment.id+'">'+comment.name+'</option>';
+                        });
+                        $("#rovince select").html(option);
+                        city()
+                        $("#rovince select").change(function(){
+                            city();
+                        })
+                    }
+                })
+            }
+            rovince()
+            console.debug(uid);
+            console.debug(token);
+            function city(){
+                $.ajax({
+                    url: '/wayu-rest/user/getArea',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {parentId:$("#rovince select").val(),uid:uid,token:token},
+                    success:function(data){
+                        console.debug(data);
+                        var option = '';
+                        $.each(data.data,function(index,comment){
+                            option += '<option value="'+comment.id+'">'+comment.name+'</option>';
+                        });
+                        $("#city select").html(option);
+                        county();
+                        $("#city select").change(function(){
+                            county();
+                        })
+                    }
+                })
+            }
+            function county(){
+                $.ajax({
+                    url: '/wayu-rest/user/getArea',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {parentId:$("#city select").val(),uid:uid,token:token},
+                    success:function(data){
+                        var option = '';
+                        $.each(data.data,function(index,comment){
+                            option += '<option value="'+comment.id+'" data-code="'+comment.zipCode+'">'+comment.name+'</option>';
+                        });
+                        $("#county select").html(option);
+                        $("#county select").change(function(){
+                            var newData = data.data;
+                            for(var i in newData){
+                                if(newData[i].id == $(this).val()){
+                                    $("#postcode").html(newData[i].zipCode);
+                                    $("#address").val(newData[i].mergerName);
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+          
+
+
+
+
+
+
+
+
+
+             //正则
+            
+            var phone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/; //电话
+            var reg =  /^\s*$/g; // 空
+            var vertival = false;
+             function _val(obj){
+                if(obj.val() == ''){
+                    obj.next().html(obj.data("error")); 
+                    vertival = false;
+                }else{
+                    obj.next().html('');
+                    vertival = true;
+                }
+            }
+            //用户名
+            $("#username").on("blur",function(){
+                _val($("#username"));
+            });
+            //街道地址
+            $("#address").on("blur",function(){
+                _val($("#address"));
+            }); 
+            //电话号码           
+            function _phone(obj){
+                if(phone.test(obj.val())){
+                    obj.next().html('');
+                    vertival = true;
+                }else{
+                    obj.next().html(obj.data("error")); 
+                    vertival = false; 
+                }
+            }
+            $("#phone").on("blur",function(){
+                _phone($("#phone"));
+            });
+           
+        })
+
+        
+        
+        </script>
+    </body>
+</html>

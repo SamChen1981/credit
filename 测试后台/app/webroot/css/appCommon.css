@@ -1,0 +1,22 @@
+.app_header_con{height:39px;width:100%;border-bottom:1px solid #e7e7e7;padding-top:10px}
+.ultab li a{display:inline-block;height:100%;width:100%;color:#666;font-weight:normal;}
+.ultab li.now a{color:#25a3eb;font-weight:bold; }
+.ultab li a:hover{color:#25a3eb;}
+
+
+.app_top_tree span{height:35px;line-height:35px;display:inline-block;vertical-align:middle;color:#999;margin-left:-4px}
+.app_top_tree span:first-of-type{color:#25a3eb;font-size:16px}
+/* 搜索框 */
+ .c-search{height:28px;line-height:28px;padding:0 10px;color:#888;width:150px;vertical-align:top;background-color:#fff;border:1px solid #ddd;z-index:999;position:relative;}
+.c-search-btn{border:none;height:30px;margin-left:-6px;cursor:pointer;background-color:#fff;background-position:-254px -555px;width:40px;border-style:solid;border-color:#ddd;border-width:1px 1px 1px 0}
+.c-search-btn:hover{background-position:-254px -469px}
+
+.footer_btn{height:45px;padding-top:15px;border-top:1px solid #e7e7e7}
+.fixedBottom{position:fixed;bottom:0;right:0}
+.footer_btn button {
+  float: right;
+  margin-left: 10px;
+}
+.app_direction_arrow{padding:0 2px;}
+.app_btn{vertical-align:middle}
+.red{border:1px solid red}

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link rel="stylesheet" href="../../css/iconfont.css">
+    <link rel="stylesheet" href="../../css/swiper.css">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<style>
+
+</style>
+<body>
+<header>
+    <a href="javascript:history.back(-1);" class="let-back"><i class="icon iconfont"></i>返回</a>
+    <h3>商品详情</h3>
+
+</header>
+<!-- /header -->
+<div class="swiper-container swiper-container-horizontal swiper-container-android" style="height: 480px;">
+    <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2880px, 0px, 0px);">
+        <?php foreach($datas['goodsdetail']['data']['imgs'] as $key=>$value):?>
+        <!--<div class="swiper-slide swiper-slide-duplicate" data-swiper-slide-index="1" style="width: 960px;">-->
+            <!--<img src="http://test.credit.sobeyyun.com:80/upload/20160711/20167173642390.png" alt="">-->
+        <!--</div>-->
+        <div class="swiper-slide" data-swiper-slide-index="0" style="width: 960px;">
+            <img src="http://<?php echo $_SERVER['HTTP_HOST'];?><?php echo $value?>" alt="">
+        </div>
+        <!--<div class="swiper-slide swiper-slide-prev" data-swiper-slide-index="1" style="width: 960px;">-->
+            <!--<img src="http://test.credit.sobeyyun.com:80<?php echo $value;?>" alt="">-->
+        <!--</div>-->
+        <!--<div class="swiper-slide swiper-slide-duplicate swiper-slide-active" data-swiper-slide-index="0" style="width: 960px;">-->
+            <!--<img src="http://test.credit.sobeyyun.com:80/<?php echo $value;?>" alt="">-->
+        <!--</div>-->
+        <?php endforeach;?>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination swiper-pagination-clickable">
+        <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+        <span class="swiper-pagination-bullet"></span>
+    </div>
+</div>
+<div class="order-change-bond">
+    <ul id="goods-detail"><li class="clearfix goods-name">
+        <span> <?php echo $datas['goodsdetail']['data']['title'];?></span><span class="fr text-primary">
+        <i class="icon iconfont "></i>&nbsp;<?php echo $datas['goodsdetail']['data']['redites'];?></span></li>
+        <li class="clearfix colorsix id=''">
+            <!--<span>剩余<?php echo $datas['goodsdetail']['data']['quantity']-$datas['goodsdetail']['data']['exchange_quantity'];?>件</span>-->
+            <span class="fr">市场价:<?php echo $datas['goodsdetail']['data']['price'];?></span>
+        </li>
+    </ul>
+    <ul>
+        <li class="clearfix">
+            <span>兑换规则</span>
+        </li>
+        <li class="clearfix goods-detail-list colorsix" id="goods-rule"><p>兑换时间：<?php echo date("Y-m-d",strtotime($datas['goodsdetail']['data']['start'])).'至'.date("Y-m-d",strtotime($datas['goodsdetail']['data']['end']));?></p><p>兑换限制：每人仅限<?php echo $datas['goodsdetail']['data']['num'];?>个</p><p>注意：商品进行兑换后，扣除的积分将不会被返还。</p></li>
+    </ul>
+    <ul>
+        <li class="clearfix">
+            <span>商品简介</span>
+        </li>
+        <li class="clearfix goods-detail-list colorsix" id="goods-intro"><?php echo $datas['goodsdetail']['data']['description'];?></li>
+
+    </ul>
+    <ul id="gain-style"> <li class="clearfix"><span>领取方式</span></li>
+    <?php if($datas['goodsdetail']['data']['way']=='2'){;?>
+    <!-- 自提 -->
+        <li class="clearfix">
+        <span class="colorsix">邮寄（免运费）</span>
+        </li>
+    <?php }elseif($datas['goodsdetail']['data']['way']=='1'){;?>
+    <li class="clearfix"><span>领取方式</span></li>
+    <li class="clearfix"><span class="colorsix">本商品不送货上门，需自提</span> </li>
+    <li class="clearfix"><span>兑换地址</span>
+        <span class="fr colorsix" id="address"><?php echo $datas['goodsdetail']['data']['addr'];?></span>
+    </li>
+    <li class="clearfix"> <span>联系人</span> <span class="fr colorsix" id="username"><?php echo $datas['goodsdetail']['data']['link'];?></span></li>
+    <li class="clearfix"><span>联系电话</span>  <span class="fr colorsix" id="telephone"><?php echo $datas['goodsdetail']['data']['phone'];?></span></li>
+    <?php };?>
+    </ul>
+</div>
+<!-- 蒙版 -->
+<div class="showbox">
+    <div class="content showbox-un">
+        <div>
+            你的积分不足，无法兑换
+        </div>
+        <p>知道了</p>
+    </div>
+    <div class="content showbox-success" >
+        <div id="integral" style="padding-top:25px;">
+            <span id="integralSpan1">兑换<?php echo $datas['goodsdetail']['data']['title'];?></span>
+            <span style="display:block;">需要消耗<?php echo $datas['goodsdetail']['data']['redites'];?>积分</span>
+            <span></span>
+        </div>
+        <p class="clearfix">
+            <span>取消</span>
+            <a href="javascript:" title="" id="changeOk"><span class="text-primary">确认</span></a>
+        </p>
+    </div>
+</div>
+<!-- 蒙版 -->
+<div class="showbox1">
+    <div class="content showbox-un">
+        <div>
+            你的积分不足，无法兑换sdfasdfa
+        </div>
+        <p>知道了</p>
+    </div>
+</div>
+<div id="name" style="display: none"><?php echo $datas['goodsdetail']['data']['link'];?></div>
+<div id="phone_num" style="display: none"><?php echo $datas['goodsdetail']['data']['addr'];?></div>
+<div id="data_address" style="display: none"><?php echo $datas['goodsdetail']['data']['phone'];?></div>
+<div id="gRedites" style="display: none"><?php echo $datas['goodsdetail']['data']['redites'];?></div>
+<div id="way" style="display: none"><?php echo $datas['goodsdetail']['data']['way'];?></div>
+<div class="mart40" id="change_click">
+<?php if($datas['goodsdetail']['data']['activityState']=='2'){;?>
+<!-- 自提 -->
+<a href="javascript:" onclick="_change()" class="button-change button btn-primary">立刻兑换 </a>
+<?php }elseif($datas['goodsdetail']['data']['way']=='1'){;?>
+    <a href="javascript:" class="button-change button btn-default">未开始 </a>
+<?php }else{;?>
+    <a href="javascript:" class="button-change button btn-default" >已过期 </a>
+<?php };?>
+</div>
+<script src="../../js/jquery2.1.1.js"></script>
+<script src="../../js/swiper.jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<script src="../../js/common.js?hash=123345"></script>
+<script>
+    swiper = new Swiper('.swiper-container', {
+        loop:true,
+        autoplay : 5000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+    // 幻灯片
+    var swiper = new Swiper('.swiper-container', {
+        loop:true,
+        autoplay : 5000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        paginationBulletRender: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+        }
+    });
+    //弹框
+    $(function(){
+        $(".showbox .content p").on("click",function(){
+            $(".showbox").hide();
+        });
+    })
+
+    //        $.ajax({
+    //            url: '/wayu-rest/user/login',
+    //            type: 'post',
+    //            dataType: 'json',
+    //            data: {username:18382049074,password:123456,mobileInfo:23, tenantid:tenent},
+    //            success:function(data){
+    //                console.log(data);
+    //            },
+    //        })
+    var gRedites = '';
+    var uRedites = '';
+    $.ajax({
+        url: '/creditshop/getMember/',
+        type: 'post',
+        dataType: 'json',
+        async : false,
+        data: {uid:uid,token:token,tenantid:tenent},
+        success:function(data){
+            if(data.code=='0000'){
+                uRedites = data.data.redites;
+            }else{
+                uRedites=-1;
+            }
+        },
+    })
+    var integral2 =  '(当前可用积分'+uRedites+')';
+    $("#integral>span:eq(2)").html(integral2);
+    function changeOk(){
+        var way=$("#way").text();
+        if(way=='1') {
+            var name = $("#name").text();
+            var address = $("#data_address").text();
+            var phone_num = $("#phone_num").text();
+            $.ajax({
+                url: '/creditshop/exchange/' + goodsId + '?tenantid=' + tenent,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    add_id: 1,
+                    name: name,
+                    token: token,
+                    user_id: uid,
+                    phone_num: phone_num,
+                    address: address,
+                    zip_code: 111111,
+                    num: 1,
+                    sign: 1
+                },
+                success: function (data) {
+                    console.debug(data);
+                    if (data.code == '0000') {
+                        window.location.href = '../../changeSuccess.html?ordersNo=' + data.ordersNo;
+                    } else {
+                        $(".showbox1 .content p")
+                        {
+                            var content = $(".showbox1 .content div").text();
+                            $(".showbox1 .showbox-un div").text(data.description);
+                            $(".showbox1").show();
+                            $(".showbox-un").show();
+                            $(".showbox1 .content p").on("click", function () {
+                                $(".showbox1").hide();
+                            });
+                        }
+                    }
+                }
+            });
+        }else if(way=='2'){
+            $("#changeOk").attr('href','../../changeSuccessPost.html?goodsId='+goodsId);
+        }
+     }
+     $("#changeOk").on('click',function() {
+                    changeOk();
+    })
+    function _change(){
+        if(uid=='undefined'||uid==null||token=='undefined'||token==null){
+            alert('未登录请注册');
+            var param=params.split("&");
+            var str='';
+            for(var i=0;i<param.length-2;i++){
+                str+='&'+param[i];
+            }
+            var str=str.split('?');
+            console.debug(param);
+            console.debug(str[1]);
+            location.href='http://cctv5.huiyuan-vip.sobeycloud.com/home/loginhtml/?callback='+window.location.href+'&'+str[1];
+        }else{
+            var gRedites=$("#gRedites").text()
+            console.debug(uRedites);
+            console.debug(gRedites);
+            if(parseInt(uRedites,10) < parseInt(gRedites,10)){
+                $(".showbox").show();
+                $(".showbox-un").show();
+            }else if(parseInt(uRedites,10) >= parseInt(gRedites,10)){
+                $(".showbox").show();
+                $(".showbox-success").show();
+            }else{}
+        }
+    }
+    $(function(){
+        var u = navigator.userAgent, app = navigator.appVersion;
+        //var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isiOS){
+            var str='<div style="text-align:center;width:100%;font-size: 12px">所有活动及奖品与苹果公司无关。</div>';
+            $('body').append(str);
+        }
+
+    });
+    var width=document.body.clientWidth;
+    var height=width*0.5;
+    $(".swiper-container").height(height);
+    $(window).resize(function(){
+        var width=document.body.clientWidth;
+        var height=width*0.5;
+        $(".swiper-container").height(height);
+    });
+</script>
+
+</body>
+</html>

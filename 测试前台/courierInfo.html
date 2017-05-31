@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+    <!--<link rel="stylesheet" href="css/style.css">-->
+    <link rel="stylesheet" href="css/swiper.css">
+    <style>
+        li{
+            line-height:20px;
+            list-style:none;
+            padding-top:2px;
+            /*border-bottom:0.5px solid #000000;*/
+        }
+        ul{
+            padding-left:10px;
+        }
+        ul div{
+           padding-top:5px;
+        }
+    </style>
+    <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+<!-- <ul>
+    <li>
+    订单状态：待收货
+    </li>
+    <li>  
+    快递公司：中通
+    </li>
+    <li>  
+    快递单号：408626239345 
+    </li>
+</ul>    -->
+<div id="orderreturnshipmentinfos">
+   <div class="track-rcol">
+        <div class="track-list">
+
+        </div>
+    </div>            
+</div>
+<script src="js/config.js"></script>
+<script src="js/jquery2.1.1.js"></script>
+<script src="js/swiper.jquery.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/common.js"></script>
+<script>
+        $.ajax({
+            url: '/creditshop/show',
+            type: 'post',
+            dataType: 'json',
+            data: {uid:uid,token:token,tenantid:tenent,logisticsInfoNum:logisticsNum},
+            success:function(data){
+                console.debug(data);
+                console.debug(data.message);
+                console.debug(data.responseText);
+                var shipinfos=data.data;
+                if(shipinfos){
+                    if(shipinfos.length>0){
+                        var htmlcontext='<ul>';
+                        for(var i=shipinfos.length-1;i>=0;i--){
+                            if(i==shipinfos.length-1){
+                               htmlcontext=htmlcontext+"<li class='first'><i class='node-icon'></i><span class='time'>"+shipinfos[i]['time']+"</span><br><span class='txt'>"+shipinfos[i]['context']+"</span></li>";
+                            }else{
+                                htmlcontext=htmlcontext+"<li><i class='node-icon'></i><span class='time'>"+shipinfos[i]['time']+"</span><br><span class='txt'>"+shipinfos[i]['context']+"</span></li>";
+                        }
+                      }                           
+                        htmlcontext=htmlcontext+'</ul>';
+                        $("#orderreturnshipmentinfos .track-list").html(htmlcontext);
+                    }
+
+                }
+            },
+            error:function(data){
+                console.debug(data);
+            }
+        })
+        $(window).resize(function(){
+            location.reload();
+        });
+</script>
+</body>
+</html>
